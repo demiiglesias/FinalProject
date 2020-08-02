@@ -1,6 +1,6 @@
 from tkinter import *
 import pandas as pd
-
+import CollaborativeFiltering2
 # genres = movies['genres']
 #
 # genres = list(dict.fromkeys(genres))
@@ -10,6 +10,10 @@ root = Tk()
 root.title('Movie Recommendation Engine')
 root.geometry("700x500")
 
+#list of movies from genre
+def get_top_2_movies(genre):
+    list = ["movie1","movie2"]
+    return list
 
 def content():
     top = Toplevel()
@@ -83,6 +87,7 @@ def collaborative():
         a = 1
 
     def show():
+            collab = CollaborativeFiltering2.get_movie_from_genre(action)
             movie = pd.read_csv("movies.csv")
             movies = Toplevel()
             movies.title('Movies')
@@ -93,6 +98,7 @@ def collaborative():
             y = Label(movies, text='Please rate 3 movies ', font="Verdana 15").place(x=60, y=400)
             action_genre = Label(movies, text='Action ', font="Verdana 12").place(x=60, y=80)
             horror_genre = Label(movies, text='Horror ', font="Verdana 12").place(x=60, y=160)
+            test = Label(movies, text = collab, font = "Verdana 12").place(x=60,y=240)
 
             text = movie.iloc[0]['title']
             mv = Label(movies, text = text).place(x=60,y=100)
@@ -102,10 +108,33 @@ def collaborative():
             mv = Label(movies, text=text).place(x=60, y=180)
             text = movie.iloc[3]['title']
             mv = Label(movies, text=text).place(x=60, y=200)
-            #text = movie.iloc[4]['title']
-           # mv = Label(movies, text=text).place(x=60, y=180)
-           # text = movie.iloc[5]['title']
-            #mv = Label(movies, text=text).place(x=60, y=200)
+            text = movie.iloc[4]['title']
+            mv = Label(movies, text=text).place(x=60, y=260)
+            #text = movie.iloc[5]['title']
+            list1 = get_top_2_movies(collab)
+            text = list1[0]
+            mv = Label(movies, text=text).place(x=60, y=280)
+
+            mini_window = Tk()
+            label_1 = Label(mini_window,text ="Please enter title of a movie you have seen in the list:")
+            entry_1 = Entry(mini_window)
+            button_1 = Button(mini_window, text = "Click me to enter title")
+            label_1.grid(row=0,column=0)
+            entry_1.grid(row=0,column=1)
+            button_1.grid(row=1,column=0)
+
+            label_2 = Label(mini_window, text="Please enter a rating:")
+            entry_2 = Entry(mini_window)
+            button_2 = Button(mini_window, text="Click me to enter rating")
+            label_2.grid(row=2, column=0)
+            entry_2.grid(row=2, column=1)
+            button_2.grid(row=3, column=0)
+
+            title = entry_1.get()
+            print(title)
+            rating = entry_2.get()
+            print(rating)
+
             my_label.pack()
             movies.mainloop()
 
@@ -125,3 +154,4 @@ second_Label.place(x=120, y=100)
 collaborative_Button.pack(padx=60, pady=20, side=LEFT)
 content_Button.pack(padx=60, pady=20, side=RIGHT)
 root.mainloop()
+
