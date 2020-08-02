@@ -134,7 +134,7 @@ def User_item_score1(user):
 user = int(input("Enter the user id to whom you want to recommend : "))
 predicted_movies = User_item_score1(user)
 print(" ")
-print("The Recommendations for User Id : 370")
+print("The Recommendations for User Id :", user)
 print("   ")
 for i in predicted_movies:
     print(i)
