@@ -1,5 +1,9 @@
 from tkinter import *
 import pandas as pd
+from test import *
+from nicksCode import *
+# from collaborativeFiltering import *
+
 
 # movies = pd.read_csv("movies.csv")
 # genres = movies['genres']
@@ -22,8 +26,11 @@ def content():
     user_fave_movie.place(x=200, y=140)
 
     def entered():
-        my_label = Label(top, text=user_fave_movie.get())
-        my_label.pack()
+        user_input = Label(top, text=user_fave_movie.get())
+
+        # my_label.pack()
+        test = improved_recommendations(user_fave_movie)
+        test1 = Label(top, text=test).pack()
 
     enter = Button(top, text='Enter', command=entered)
     enter.place(x=200, y=190)
@@ -80,6 +87,10 @@ def collaborative():
     chk = Checkbutton(c, text="Film-Noir", variable=film_noir).place(x=60, y=340)
     western = StringVar()
     chk = Checkbutton(c, text="Western", variable=western).place(x=60, y=360)
+
+    test = Person("demi", 79)
+    label_test = Label(c, text=Person("Demi", 28))
+    label_test.pack()
 
     def show():
         my_label = Label(c, text="Genre")
