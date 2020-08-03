@@ -1,6 +1,7 @@
 from tkinter import *
 import content_based
 import movie_fetcher
+
 # from collaborativeFiltering import *
 
 
@@ -39,6 +40,7 @@ def content():
 
 # rating1 = Spinbox(c, from_=0, to=5, width=3)
 #     rating1.pack(
+
 def collaborative():
     c = Toplevel()
     c.title('Collaborative Based Filtering')
@@ -169,30 +171,25 @@ def collaborative():
 
         def mini_win():
             mini_window = Tk()
+            mini_window.title('User Recommendation')
+            mini_window.geometry("700x500")
+
             user_title = Label(mini_window, text="Please enter title of a movie you have seen in the list:")
-            user_title_text = Entry(mini_window)
-            button_1 = Button(mini_window, text="Click me to enter title")
-            user_title.grid(row=0, column=0)
-            user_title_text.grid(row=0, column=1)
-            button_1.grid(row=1, column=0)
+            user_title.place(x=10, y=10)
+            user_movie_input = Entry(mini_window).place(x=10, y=40)
+            rating_label = Label(mini_window, text="Please enter a rating:").place(x=10, y=100)
+            user_rating = Entry(mini_window).place(x=10, y=130)
 
-            label_2 = Label(mini_window, text="Please enter a rating:")
-            entry_2 = Entry(mini_window)
-            button_2 = Button(mini_window, text="Click me to enter rating")
-            label_2.grid(row=2, column=0)
-            entry_2.grid(row=2, column=1)
-            button_2.grid(row=3, column=0)
+            def retrieve_movies():
+                user_movie_input.get()
+                user_rating.get()
+                # recommendations = kianasFunction(str(user_movie_input))
+                # recommendations = kianasFunction(str(user_rating))
 
-            # movie_rated = user_title_text.get() #returns movie title inputted
-            # movie_ranking = entry_2.get()
-            def retrieve_input():
-                movie_rated = user_title_text.get()  # returns movie title inputted
-                return movie_rated
-
-            print("movie", retrieve_input())
+            enter_button = Button(mini_window, text="Enter", command=retrieve_movies).place(x=10, y=180)
 
         # opens mini_window window
-        next2 = Button(movies, text="Click here to rate movie", command=mini_win).place(x=500, y=380)
+        next2 = Button(movies, text="Click here to rate movies", command=mini_win).place(x=500, y=380)
 
         my_label.pack()
         movies.mainloop()
