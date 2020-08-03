@@ -198,9 +198,9 @@ def recommender(movie_title):
     final_list['w_r'] = final_list.apply(weighted_rating, args=(m, C), axis=1)
     # Sorting in descending order, then limiting the number of movies to output
     final_list = final_list.sort_values('w_r', ascending=False)
+    final_list = movies['title']
     final_list = final_list[0:10]
-
-    return final_list
+    return final_list.to_string(index=False)
 
 # # =================  Printing/Testing  =================
 # print("========= recommender('Finding Nemo') =========")
