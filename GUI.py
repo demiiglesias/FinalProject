@@ -1,7 +1,7 @@
 from tkinter import *
 import pandas as pd
 from test import *
-import nicksCode
+import content_based
 
 # from collaborativeFiltering import *
 # movies = pd.read_csv("movies.csv")
@@ -27,11 +27,11 @@ def content():
     user_fave_movie.focus()
 
     def entered():
-        m.forget()
+        m.destroy()
         title = Label(top, text='We think you will love these movies too!', font="Verdana 15", border="2")
-        title.place(x=200, y=40)
+        title.place(x=200, y=70)
         user_input = user_fave_movie.get()
-        recommendations = nicksCode.improved_recommendations(str(user_input))
+        recommendations = content_based.recommender(str(user_input))
         recommendations_display = Label(top, text=recommendations)
         recommendations_display.place(x=240, y=140)
         user_fave_movie.destroy()
