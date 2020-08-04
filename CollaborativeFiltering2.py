@@ -15,6 +15,23 @@ def find_movie_Id(movie):
     # creates movie dataframe
 
 movies = pd.read_csv("movies.csv")
+
+# print(movies['title'])
+# print()
+
+title_col = []
+for x in movies['title']:
+    substring = x[:x.rfind("(") - 1]
+    try:
+        title_col.append(str(substring))
+    except:
+        title_col.append(x)
+
+movies['title'] = title_col
+
+# print(movies['title'])
+# print()
+
 # create a new user and store movies + ratings
 new_user = {}
 convert = {}
