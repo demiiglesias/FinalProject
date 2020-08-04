@@ -76,16 +76,10 @@ def collaborative():
     chk = Checkbutton(c, text="Mystery", variable=mystery).place(x=60, y=300)
     fantasy = IntVar()
     chk = Checkbutton(c, text="Fantasy", variable=fantasy).place(x=60, y=200)
-    documentary = IntVar()
-    chk = Checkbutton(c, text="Documentary", variable=documentary).place(x=60, y=180)
-    imax = IntVar()
-    chk = Checkbutton(c, text="Imax", variable=imax).place(x=60, y=260)
     war = IntVar()
     chk = Checkbutton(c, text="War", variable=war).place(x=60, y=380)
     musical = IntVar()
     chk = Checkbutton(c, text="Musical", variable=musical).place(x=60, y=280)
-    film_noir = IntVar()
-    chk = Checkbutton(c, text="Film-Noir", variable=film_noir).place(x=60, y=220)
     western = IntVar()
     chk = Checkbutton(c, text="Western", variable=western).place(x=60, y=400)
 
@@ -131,20 +125,11 @@ def collaborative():
         if fantasy.get() == 1:
             list_of_movie_genres.append("Fantasy")
 
-        if documentary.get() == 1:
-            list_of_movie_genres.append("Documentary")
-
-        if imax.get() == 1:
-            list_of_movie_genres.append("Imax")
-
         if war.get() == 1:
             list_of_movie_genres.append("War")
 
         if musical.get() == 1:
             list_of_movie_genres.append("Musical")
-
-        if film_noir.get() == 1:
-            list_of_movie_genres.append("Film-Noir")
 
         if western.get() == 1:
             list_of_movie_genres.append("Western")
