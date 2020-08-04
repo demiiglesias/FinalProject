@@ -22,7 +22,7 @@ my_label2 = Label(image=img2)
 my_label2.pack(side="right")
 
 # play music
-winsound.PlaySound('africa-toto.wav', winsound.SND_ALIAS | winsound.SND_ASYNC)
+#winsound.PlaySound('africa-toto.wav', winsound.SND_ALIAS | winsound.SND_ASYNC)
 
 
 def content():
@@ -201,7 +201,13 @@ def collaborative():
                 movie = user_movie_input.get()
                 rating = user_rating.get()
                 dict[movie] = rating
-                print(dict)
+                print("dict", dict)
+                str_count = str(count - len(dict))
+                print("Dictionary length:", len(dict))
+                print("Str", str_count)
+                num_movies_rated_label = Label(mini_window, text="# movies left to rate: " + str_count)
+                num_movies_rated_label.grid(row=4, column=1)
+
                 return dict
 
             str_count = str(count)
@@ -277,16 +283,16 @@ def collaborative():
     c.mainloop()
 
 
-# ct_Button = PhotoImage(file='content.png')
-# co_Button = PhotoImage(file='collab.png')
+ct_Button = PhotoImage(file='content.png')
+co_Button = PhotoImage(file='collab.png')
 first_Label = Label(root, text="Welcome to the Movie Recommendation System", font="Verdana 20", fg="white", bg="black")
 second_Label = Label(root, text="choose an algorithm for a movie recommendation", font="Verdana 20", fg="white",
                      bg="black")
-# collaborative_Button = Button(root, image=co_Button, command=collaborative, borderwidth=0, bg="black")
-# content_Button = Button(root, image=ct_Button, command=content, borderwidth=0)
+collaborative_Button = Button(root, image=co_Button, command=collaborative, borderwidth=0, bg="black")
+content_Button = Button(root, image=ct_Button, command=content, borderwidth=0)
 
-collaborative_Button = ttk.Button(root, text="Collaborative Filtering", command=collaborative)
-content_Button = Button(root, text="Content Filtering", font="Verdana 15", command=content)
+#collaborative_Button = ttk.Button(root, text="Collaborative Filtering", command=collaborative)
+#content_Button = Button(root, text="Content Filtering", font="Verdana 15", command=content)
 
 first_Label.place(x=130, y=70)
 second_Label.place(x=120, y=100)
