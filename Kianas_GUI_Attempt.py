@@ -1,10 +1,12 @@
 from tkinter import *
 import pandas as pd
-# import main
+#import main
+import movie_fetcher
 
 root = Tk()
 root.title('Movie Recommendation Engine')
 root.geometry("700x500")
+root.configure(background='black')
 
 def content():
     top = Toplevel()
@@ -14,10 +16,19 @@ def content():
     user_fave_movie = Entry(top, width=30)
     m.place(x=200, y=100)
     user_fave_movie.place(x=200, y=140)
+    user_fave_movie.focus()
 
     def entered():
-        my_label = Label(top, text=user_fave_movie.get())
-        my_label.pack()
+        m.forget()
+        title = Label(top, text='We think you will love these movies too!', font="Verdana 15", border="2")
+        title.place(x=200, y=40)
+        user_input = user_fave_movie.get()
+        #recommendations = nicksCode.improved_recommendations(str(user_input))
+        #recommendations_display = Label(top, text=recommendations)
+        #recommendations_display.place(x=240, y=140)
+        user_fave_movie.destroy()
+        enter.destroy()
+
 
     enter = Button(top, text='Enter', command=entered)
     enter.place(x=200, y=190)
@@ -84,80 +95,150 @@ def collaborative():
 
         if animation.get() == 1:
             list_of_movie_genres.append("Animation")
+            if sci_fi.get() == 1:
+                list_of_movie_genres.append("Sci-Fi")
 
-        movie = pd.read_csv("movies.csv")
+            if children.get() == 1:
+                list_of_movie_genres.append("Children")
+
+            if comedy.get() == 1:
+                list_of_movie_genres.append("Comedy")
+
+            if thriller.get() == 1:
+                list_of_movie_genres.append("Thriller")
+
+            if romance.get() == 1:
+                list_of_movie_genres.append("Romance")
+
+            if horror.get() == 1:
+                list_of_movie_genres.append("Horror")
+
+            if drama.get() == 1:
+                list_of_movie_genres.append("Drama")
+
+            if crime.get() == 1:
+                list_of_movie_genres.append("Crime")
+
+            if mystery.get() == 1:
+                list_of_movie_genres.append("Mystery")
+
+            if fantasy.get() == 1:
+                list_of_movie_genres.append("Fantasy")
+
+            if documentary.get() == 1:
+                list_of_movie_genres.append("Documentary")
+
+            if imax.get() == 1:
+                list_of_movie_genres.append("Imax")
+
+            if war.get() == 1:
+                list_of_movie_genres.append("War")
+
+            if musical.get() == 1:
+                list_of_movie_genres.append("Musical")
+
+            if film_noir.get() == 1:
+                list_of_movie_genres.append("Film-Noir")
+
+            if western.get() == 1:
+                list_of_movie_genres.append("Western")
+
+
         movies = Toplevel()
         movies.title('Movies')
         movies.geometry("700x500")
         my_label = Label(movies, text="Genre")
 
         x = Label(movies, text='Here are some movies you may like ', font="Verdana 15").place(x=60, y=30)
-        y = Label(movies, text='Please rate 10 movies ', font="Verdana 15").place(x=60, y=400)
+        y = Label(movies, text='Please rate 5 movies ', font="Verdana 15").place(x=60, y=400)
 
         genre_1 = Label(movies, text=list_of_movie_genres[0], font="Verdana 12").place(x=60, y=80)
         genre_2 = Label(movies, text=list_of_movie_genres[1], font="Verdana 12").place(x=60, y=160)
         genre_3 = Label(movies, text=list_of_movie_genres[2], font="Verdana 12").place(x=60, y=240)
 
-        # movie_1 = main.get_movie_from_genre(genre_1)
-        # movie_2 = main.get_movie_from_genre(genre_1)
-        # movie_3 = main.get_movie_from_genre(genre_2)
-        # movie_4 = main.get_movie_from_genre(genre_2)
-        # movie_5 = main.get_movie_from_genre(genre_3)
-        # movie_6 = main.get_movie_from_genre(genre_3)
+        movies_one_two = movie_fetcher.get_movies_from_genre(list_of_movie_genres[0])
+        movies_three_four = movie_fetcher.get_movies_from_genre(list_of_movie_genres[1])
+        movie_five_six = movie_fetcher.get_movies_from_genre(list_of_movie_genres[2])
 
-        text = movie.iloc[0]['title']
-        mv = Label(movies, text=text).place(x=60, y=100)
-        #mv = Label(movies,text=movie_1).place(x=60,y=100)
-        text = movie.iloc[1]['title']
-        mv = Label(movies, text=text).place(x=60, y=120)
-        text = movie.iloc[2]['title']
-        mv = Label(movies, text=text).place(x=60, y=180)
-        text = movie.iloc[3]['title']
-        mv = Label(movies, text=text).place(x=60, y=200)
-        text = movie.iloc[4]['title']
-        mv = Label(movies, text=text).place(x=60, y=260)
-        text = movie.iloc[5]['title']
-        mv = Label(movies, text=text).place(x=60, y=280)
+        mv = Label(movies, text=movies_one_two).place(x=60, y=120)
+        mv2 = Label(movies, text=movies_three_four).place(x=60, y=220)
+        mv3 = Label(movies, text=movie_five_six).place(x=60, y=320)
+        count = 5
+
 
         def mini_win():
             mini_window = Tk()
-            user_title = Label(mini_window, text="Please enter title of a movie you have seen in the list:")
-            user_title_text = Entry(mini_window)
-            button_1 = Button(mini_window, text="Click me to enter title")
-            user_title.grid(row=0, column=0)
-            user_title_text.grid(row=0, column=1)
-            button_1.grid(row=1, column=0)
+            mini_window.title('Rate Movies you have seen')
+            user_title_label = Label(mini_window, text="Please enter title of a movie you have seen in the list:")
+            user_title_label.grid(row = 0, column = 0)
+            user_movie_input = Entry(mini_window)
+            user_movie_input.grid(row = 0, column = 1)
+            rating_label = Label(mini_window, text="Please enter a rating:")
+            rating_label.grid(row = 1, column = 0)
+            user_rating = Entry(mini_window)
+            user_rating.grid(row = 1, column = 1)
+            dict = {}
 
-            label_2 = Label(mini_window, text="Please enter a rating:")
-            entry_2 = Entry(mini_window)
-            button_2 = Button(mini_window, text="Click me to enter rating")
-            label_2.grid(row=2, column=0)
-            entry_2.grid(row=2, column=1)
-            button_2.grid(row=3, column=0)
+            def retrieve_movies():
+                    newcount = count - 1
+                    movie = user_movie_input.get()
+                    rating = user_rating.get()
+                    dict[movie] = rating
+                    return dict
 
-           # movie_rated = user_title_text.get() #returns movie title inputted
-            #movie_ranking = entry_2.get()
-            def retrieve_input():
-                movie_rated = user_title_text.get() #returns movie title inputted
-                return movie_rated
-            print("movie",retrieve_input())
-        #opens mini_window window
+            str_count = str(count)
+
+            #To retrieve value when enter is selected
+            enter_button = Button(mini_window, text="Enter", command=retrieve_movies)
+            enter_button.grid(row=3,column=0)
+
+            def clear():
+                user_movie_input.delete(0,'end')
+                user_rating.delete(0,'end')
+
+            clear_button = Button(mini_window, text="Clear text", command=clear)
+            clear_button.grid(row=3, column=1)
+
+            def give_Rec():
+                last_window = Toplevel()
+                last_window.title('Movies Recommended for you')
+                last_window.geometry("700x500")
+                mv = Label(last_window, text="1.Titanic").place(x=60, y=120)
+                #main.GUI_Output()
+
+            open_last_window = Button(mini_window, text="Get Recommendations", command=give_Rec)
+            open_last_window.grid(row=4, column=0)
+
+            num_movies_rated_label = Label(mini_window, text="# movies left to rate: " + str_count)
+            num_movies_rated_label.grid(row=4, column=1)
+
+
+        #opens mini_window
         next2 = Button(movies, text="Click here to rate movie", command=mini_win).place(x=500, y=380)
-
 
         my_label.pack()
         movies.mainloop()
     #opens next window
-    next = Button(c, text="Next", command=show).place(x=350, y=400)
+    next3 = Button(c, text="Next", command=show).place(x=350, y=400)
     c.mainloop()
 
-first_Label = Label(root, text="Welcome to the Movie Recommendation System", font="Verdana 20")
-second_Label = Label(root, text="choose an algorithm for a movie recommendation", font="Verdana 20")
+#ct_Button = PhotoImage(file='content.png')
+#co_Button = PhotoImage(file='collab.png')
+first_Label = Label(root, text="Welcome to the Movie Recommendation System", font="Verdana 20", fg="white", bg="black")
+second_Label = Label(root, text="choose an algorithm for a movie recommendation", font="Verdana 20", fg="white",
+                     bg="black")
+#collaborative_Button = Button(root, image=co_Button, command=collaborative, borderwidth=0, bg="black")
+#content_Button = Button(root, image=ct_Button, command=content, borderwidth=0)
+
 collaborative_Button = Button(root, text="Collaborative Filtering", font="Verdana 15", command=collaborative)
 content_Button = Button(root, text="Content Filtering", font="Verdana 15", command=content)
 
 first_Label.place(x=130, y=70)
 second_Label.place(x=120, y=100)
-collaborative_Button.pack(padx=60, pady=20, side=LEFT)
-content_Button.pack(padx=60, pady=20, side=RIGHT)
+collaborative_Button.place(x=210, y=180)
+content_Button.place(x=210, y=270)
+
 root.mainloop()
+
+#main.GUI_Output()
+
