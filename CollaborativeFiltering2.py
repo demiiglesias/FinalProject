@@ -2,7 +2,6 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from GUI import *
 
 def find_movie_Id(movie):
     ID = -1
@@ -12,12 +11,9 @@ def find_movie_Id(movie):
             # ID is assigned to movie selected
             ID = row.movieId
     return ID
-    # creates movie dataframe
 
+# creates movie dataframe
 movies = pd.read_csv("movies.csv")
-
-# print(movies['title'])
-# print()
 
 title_col = []
 for x in movies['title']:
@@ -29,114 +25,65 @@ for x in movies['title']:
 
 movies['title'] = title_col
 
-# print(movies['title'])
-# print()
 
-# create a new user and store movies + ratings
-new_user = {}
-convert = {}
+def write_to_file(convert):
+    keys = []
+    values = []
+    #list of keys
+    keys_list = convert.keys()
+    #list of values
+    values_list = convert.values()
 
-movie1 = "Toy Story (1995)"
-print(movie1)
-print("rate:", movie1)
-rating1 = int(input())
-new_user[movie1] = rating1
+    for key in keys_list:
+        keys.append(key)
 
-movie2 = "Jumanji (1995)"
-print(movie2)
-print("rate:", movie2)
-rating2 = int(input())
-new_user[movie2] = rating2
+    for value in values_list:
+        values.append(value)
 
-movie3 = "Clueless (1995)"
-print(movie3)
-print("rate:", movie3)
-rating3 = int(input())
-new_user[movie3] = rating3
+    key1 = keys[0]
+    value1 = values[0]
+    float_value1 = float(value1)
 
-movie4 = "Restoration (1995)"
-print(movie4)
-print("rate:", movie4)
-rating4 = int(input())
-new_user[movie4] = rating4
+    line1 = "611," + str(key1) +"," + str(float_value1) + ",1"
 
-movie5 = "Mortal Kombat (1995)"
-print(movie5)
-print("rate:", movie5)
-rating5 = int(input())
-new_user[movie5] = rating5
+    key2 = keys[1]
+    value2 = values[1]
+    float_value2 = float(value2)
 
-#movie_titles = []
-#for movie in movie_titles:
-    #convert[find_movie_Id(movie)] = convert.values(movie)
-convert[find_movie_Id(movie1)] = rating1
-convert[find_movie_Id(movie2)] = rating2
-convert[find_movie_Id(movie3)] = rating3
-convert[find_movie_Id(movie4)] = rating4
-convert[find_movie_Id(movie5)] = rating5
+    line2 = "611," + str(key2) +"," + str(float_value2) + ",1"
 
-key1 = list(convert.keys())[0]
-values = convert.values()
-value_iterator = iter(values)
-value1 = next(value_iterator)
-float_value1 = float(value1)
+    key3 = keys[2]
+    value3 = values[2]
+    float_value3 = float(value3)
 
-key2 = list(convert.keys())[1]
-values = convert.values()
-value_iterator = iter(values)
-value2 = next(value_iterator)
-float_value2 = float(value2)
+    line3 = "611," + str(key3) + "," + str(float_value3) + ",1"
 
-key3 = list(convert.keys())[2]
-values = convert.values()
-value_iterator = iter(values)
-value3 = next(value_iterator)
-float_value3 = float(value3)
+    key4 = keys[3]
+    value4 = values[3]
+    float_value4 = float(value4)
 
-key4 = list(convert.keys())[3]
-values = convert.values()
-value_iterator = iter(values)
-value4 = next(value_iterator)
-float_value4 = float(value4)
+    line4 = "611," + str(key4) + "," + str(float_value4) + ",1"
 
-key5 = list(convert.keys())[4]
-values = convert.values()
-value_iterator = iter(values)
-value5 = next(value_iterator)
-float_value5 = float(value5)
+    key5 = keys[4]
+    value5 = values[4]
+    float_value5 = float(value5)
 
-line1 = "611," + str(key1) +"," + str(float_value1) + ",1"
-print(line1)
+    line5 = "611," + str(key5) +"," + str(float_value5) + ",1"
 
-line2 = "611," + str(key2) +"," + str(float_value2) + ",1"
-print(line1)
+    # add user information to csv file, USER INFO IS REGISTERED AS USER 611
+    with open("ratings.csv",'a', newline='') as file:
+        file.write("\n")
+        file.write(line1)
+        file.write("\n")
+        file.write(line2)
+        file.write("\n")
+        file.write(line3)
+        file.write("\n")
+        file.write(line4)
+        file.write("\n")
+        file.write(line5)
+        file.close()
 
-line3 = "611," + str(key3) +"," + str(float_value3) + ",1"
-print(line1)
-
-line4 = "611," + str(key4) +"," + str(float_value4) + ",1"
-print(line1)
-
-line5 = "611," + str(key5) +"," + str(float_value5) + ",1"
-print(line1)
-
-
-# add user information to csv file, USER INFO IS REGISTERED AS USER 611
-with open("ratings.csv",'a', newline='') as file:
-   file.write("\n")
-   file.write(line1)
-   file.write("\n")
-   file.write(line2)
-   file.write("\n")
-   file.write(line3)
-   file.write("\n")
-   file.write(line4)
-   file.write("\n")
-   file.write(line5)
-file.close()
-    #611, harry potter, 3
-    #611, thor, 4
-    #611, toy story, 2
 
 ratings = pd.read_csv("ratings.csv")
 tags = pd.read_csv("tags.csv")
@@ -263,15 +210,12 @@ def User_item_score1(user):
 user = ratings.iloc[-1]['userId']
 
 
-#def GUI_Output():
-predicted_movies = User_item_score1(user)
-for i in predicted_movies:
-        print(i)
+def GUI_Output():
+    list = []
+    predicted_movies = User_item_score1(user)
 
-# delete active user info
-# f = open("ratings.csv","r+w")
-# lines = f.readlines()
-# lines = lines[:-1]
-# cWriter = csv_writer(f,delimiter=',')
-# for line in lines:
-# cWriter.writerow(line)
+    for i in predicted_movies:
+        list.append(i)
+
+    return list
+
