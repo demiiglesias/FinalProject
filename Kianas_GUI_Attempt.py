@@ -1,244 +1,222 @@
-from tkinter import *
 import pandas as pd
-#import main
-import movie_fetcher
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
-root = Tk()
-root.title('Movie Recommendation Engine')
-root.geometry("700x500")
-root.configure(background='black')
+def find_movie_Id(movie):
+    ID = -1
+    # looks through all movies in title column
+    for row in movies.itertuples():
+        if movie == row.title:
+            # ID is assigned to movie selected
+            ID = row.movieId
+    return ID
 
-def content():
-    top = Toplevel()
-    top.title('Content Based Filtering')
-    top.geometry("700x500")
-    m = Label(top, text='Enter a favorite movie: ', font="Verdana 15")
-    user_fave_movie = Entry(top, width=30)
-    m.place(x=200, y=100)
-    user_fave_movie.place(x=200, y=140)
-    user_fave_movie.focus()
+# creates movie dataframe
+movies = pd.read_csv("movies.csv")
 
-    def entered():
-        m.forget()
-        title = Label(top, text='We think you will love these movies too!', font="Verdana 15", border="2")
-        title.place(x=200, y=40)
-        user_input = user_fave_movie.get()
-        #recommendations = nicksCode.improved_recommendations(str(user_input))
-        #recommendations_display = Label(top, text=recommendations)
-        #recommendations_display.place(x=240, y=140)
-        user_fave_movie.destroy()
-        enter.destroy()
+title_col = []
+for x in movies['title']:
+    substring = x[:x.rfind("(") - 1]
+    try:
+        title_col.append(str(substring))
+    except:
+        title_col.append(x)
+
+movies['title'] = title_col
 
 
-    enter = Button(top, text='Enter', command=entered)
-    enter.place(x=200, y=190)
+def write_to_file(convert):
+    keys = []
+    values = []
+    #list of keys
+    keys_list = convert.keys()
+    #list of values
+    values_list = convert.values()
 
-    top.mainloop()
+    for key in keys_list:
+        keys.append(key)
 
+    for value in values_list:
+        values.append(value)
 
-def collaborative():
-    c = Toplevel()
-    c.title('Collaborative Based Filtering')
-    c.geometry("700x500")
+    key1 = keys[0]
+    value1 = values[0]
+    float_value1 = float(value1)
 
-    m = Label(c, text='Pick 3 of your favorite genres ', font="Verdana 15")
-    m.place(x=60, y=10)
+    line1 = "611," + str(key1) +"," + str(float_value1) + ",1"
 
-    # Genres for check-box
-    action = IntVar()
-    chk = Checkbutton(c, text="Action", variable=action).place(x=60, y=40)
-    children = IntVar()
-    chk = Checkbutton(c, text="Children", variable=children).place(x=60, y=100)
-    sci_fi = IntVar()
-    chk = Checkbutton(c, text="Sci-Fi", variable=sci_fi).place(x=60, y=340)
-    adventure = IntVar()
-    chk = Checkbutton(c, text="Adventure", variable=adventure).place(x=60, y=60)
-    animation = IntVar()
-    chk = Checkbutton(c, text="Animation", variable=animation).place(x=60, y=80)
-    comedy = IntVar()
-    chk = Checkbutton(c, text="Comedy", variable=comedy).place(x=60, y=120)
-    thriller = IntVar()
-    chk = Checkbutton(c, text="Thriller", variable=thriller).place(x=60, y=360)
-    romance = IntVar()
-    chk = Checkbutton(c, text="Romance", variable=romance).place(x=60, y=320)
-    horror = IntVar()
-    chk = Checkbutton(c, text="Horror", variable=horror).place(x=60, y=240)
-    drama = IntVar()
-    chk = Checkbutton(c, text="Drama", variable=drama).place(x=60, y=160)
-    crime = IntVar()
-    chk = Checkbutton(c, text="Crime", variable=crime).place(x=60, y=140)
-    mystery = IntVar()
-    chk = Checkbutton(c, text="Mystery", variable=mystery).place(x=60, y=300)
-    fantasy = IntVar()
-    chk = Checkbutton(c, text="Fantasy", variable=fantasy).place(x=60, y=200)
-    documentary = IntVar()
-    chk = Checkbutton(c, text="Documentary", variable=documentary).place(x=60, y=180)
-    imax = IntVar()
-    chk = Checkbutton(c, text="Imax", variable=imax).place(x=60, y=260)
-    war = IntVar()
-    chk = Checkbutton(c, text="War", variable=war).place(x=60, y=380)
-    musical = IntVar()
-    chk = Checkbutton(c, text="Musical", variable=musical).place(x=60, y=280)
-    film_noir = IntVar()
-    chk = Checkbutton(c, text="Film-Noir", variable=film_noir).place(x=60, y=220)
-    western = IntVar()
-    chk = Checkbutton(c, text="Western", variable=western).place(x=60, y=400)
+    key2 = keys[1]
+    value2 = values[1]
+    float_value2 = float(value2)
 
-    def show():
-        list_of_movie_genres = []
+    line2 = "611," + str(key2) +"," + str(float_value2) + ",1"
 
-        if action.get() == 1:
-            list_of_movie_genres.append("Action")
+    key3 = keys[2]
+    value3 = values[2]
+    float_value3 = float(value3)
 
-        if adventure.get() == 1:
-            list_of_movie_genres.append("Adventure")
+    line3 = "611," + str(key3) + "," + str(float_value3) + ",1"
 
-        if animation.get() == 1:
-            list_of_movie_genres.append("Animation")
-            if sci_fi.get() == 1:
-                list_of_movie_genres.append("Sci-Fi")
+    key4 = keys[3]
+    value4 = values[3]
+    float_value4 = float(value4)
 
-            if children.get() == 1:
-                list_of_movie_genres.append("Children")
+    line4 = "611," + str(key4) + "," + str(float_value4) + ",1"
 
-            if comedy.get() == 1:
-                list_of_movie_genres.append("Comedy")
+    key5 = keys[4]
+    value5 = values[4]
+    float_value5 = float(value5)
 
-            if thriller.get() == 1:
-                list_of_movie_genres.append("Thriller")
+    line5 = "611," + str(key5) +"," + str(float_value5) + ",1"
 
-            if romance.get() == 1:
-                list_of_movie_genres.append("Romance")
-
-            if horror.get() == 1:
-                list_of_movie_genres.append("Horror")
-
-            if drama.get() == 1:
-                list_of_movie_genres.append("Drama")
-
-            if crime.get() == 1:
-                list_of_movie_genres.append("Crime")
-
-            if mystery.get() == 1:
-                list_of_movie_genres.append("Mystery")
-
-            if fantasy.get() == 1:
-                list_of_movie_genres.append("Fantasy")
-
-            if documentary.get() == 1:
-                list_of_movie_genres.append("Documentary")
-
-            if imax.get() == 1:
-                list_of_movie_genres.append("Imax")
-
-            if war.get() == 1:
-                list_of_movie_genres.append("War")
-
-            if musical.get() == 1:
-                list_of_movie_genres.append("Musical")
-
-            if film_noir.get() == 1:
-                list_of_movie_genres.append("Film-Noir")
-
-            if western.get() == 1:
-                list_of_movie_genres.append("Western")
+    # add user information to csv file, USER INFO IS REGISTERED AS USER 611
+    with open("ratings.csv",'a', newline='') as file:
+        file.write("\n")
+        file.write(line1)
+        file.write("\n")
+        file.write(line2)
+        file.write("\n")
+        file.write(line3)
+        file.write("\n")
+        file.write(line4)
+        file.write("\n")
+        file.write(line5)
+        file.close()
 
 
-        movies = Toplevel()
-        movies.title('Movies')
-        movies.geometry("700x500")
-        my_label = Label(movies, text="Genre")
+ratings = pd.read_csv("ratings.csv")
+tags = pd.read_csv("tags.csv")
+# group userID and rating
+mean = ratings.groupby(by="userId", as_index=False)['rating'].mean()
+rating_avg = pd.merge(ratings, mean, on='userId')
+rating_avg['adg_rating'] = rating_avg['rating_x']
+rating_avg['rating_y']
+rating_avg.head()
 
-        x = Label(movies, text='Here are some movies you may like ', font="Verdana 15").place(x=60, y=30)
-        y = Label(movies, text='Please rate 5 movies ', font="Verdana 15").place(x=60, y=400)
+movies.head()
+ratings.head()
+tags.head()
 
-        genre_1 = Label(movies, text=list_of_movie_genres[0], font="Verdana 12").place(x=60, y=80)
-        genre_2 = Label(movies, text=list_of_movie_genres[1], font="Verdana 12").place(x=60, y=160)
-        genre_3 = Label(movies, text=list_of_movie_genres[2], font="Verdana 12").place(x=60, y=240)
+check = pd.pivot_table(rating_avg, values='rating_x', index='userId', columns='movieId')
+check.head()
 
-        movies_one_two = movie_fetcher.get_movies_from_genre(list_of_movie_genres[0])
-        movies_three_four = movie_fetcher.get_movies_from_genre(list_of_movie_genres[1])
-        movie_five_six = movie_fetcher.get_movies_from_genre(list_of_movie_genres[2])
+final = pd.pivot_table(rating_avg, values='adg_rating', index='userId', columns='movieId')
 
-        mv = Label(movies, text=movies_one_two).place(x=60, y=120)
-        mv2 = Label(movies, text=movies_three_four).place(x=60, y=220)
-        mv3 = Label(movies, text=movie_five_six).place(x=60, y=320)
-        count = 5
+final_movie = final.fillna(final.mean(axis=0))
+final_movie.head()
 
+final_user = final.apply(lambda row: row.fillna(row.mean()), axis=1)
+final_user.head()
 
-        def mini_win():
-            mini_window = Tk()
-            mini_window.title('Rate Movies you have seen')
-            user_title_label = Label(mini_window, text="Please enter title of a movie you have seen in the list:")
-            user_title_label.grid(row = 0, column = 0)
-            user_movie_input = Entry(mini_window)
-            user_movie_input.grid(row = 0, column = 1)
-            rating_label = Label(mini_window, text="Please enter a rating:")
-            rating_label.grid(row = 1, column = 0)
-            user_rating = Entry(mini_window)
-            user_rating.grid(row = 1, column = 1)
-            dict = {}
+# user similarity on replacing NAN by user  avg
+cosine = cosine_similarity(final_user)
+np.fill_diagonal(cosine, 0)
+similarity_with_user = pd.DataFrame(cosine, index=final_user.index)
+similarity_with_user.columns = final_user.index
+similarity_with_user.head()
 
-            def retrieve_movies():
-                    newcount = count - 1
-                    movie = user_movie_input.get()
-                    rating = user_rating.get()
-                    dict[movie] = rating
-                    return dict
-
-            str_count = str(count)
-
-            #To retrieve value when enter is selected
-            enter_button = Button(mini_window, text="Enter", command=retrieve_movies)
-            enter_button.grid(row=3,column=0)
-
-            def clear():
-                user_movie_input.delete(0,'end')
-                user_rating.delete(0,'end')
-
-            clear_button = Button(mini_window, text="Clear text", command=clear)
-            clear_button.grid(row=3, column=1)
-
-            def give_Rec():
-                last_window = Toplevel()
-                last_window.title('Movies Recommended for you')
-                last_window.geometry("700x500")
-                mv = Label(last_window, text="1.Titanic").place(x=60, y=120)
-                #main.GUI_Output()
-
-            open_last_window = Button(mini_window, text="Get Recommendations", command=give_Rec)
-            open_last_window.grid(row=4, column=0)
-
-            num_movies_rated_label = Label(mini_window, text="# movies left to rate: " + str_count)
-            num_movies_rated_label.grid(row=4, column=1)
+# user similarity on replacing NAN by movie avg
+cosine_B = cosine_similarity(final_movie)
+np.fill_diagonal(cosine_B, 0)
+similarity_with_movie = pd.DataFrame(cosine_B, index=final_movie.index)
+similarity_with_movie.columns = final_user.index
+similarity_with_movie.head()
 
 
-        #opens mini_window
-        next2 = Button(movies, text="Click here to rate movie", command=mini_win).place(x=500, y=380)
+# KNN Nearest neighbors
+def find_n_neighbors(df, n):
+    order = np.argsort(df.values, axis=1)[:, :n]
+    df = df.apply(lambda x: pd.Series(x.sort_values(ascending=False).iloc[:n].index,
+                                      index=['top{}'.format(i) for i in range(1, n + 1)]), axis=1)
+    return df
 
-        my_label.pack()
-        movies.mainloop()
-    #opens next window
-    next3 = Button(c, text="Next", command=show).place(x=350, y=400)
-    c.mainloop()
 
-#ct_Button = PhotoImage(file='content.png')
-#co_Button = PhotoImage(file='collab.png')
-first_Label = Label(root, text="Welcome to the Movie Recommendation System", font="Verdana 20", fg="white", bg="black")
-second_Label = Label(root, text="choose an algorithm for a movie recommendation", font="Verdana 20", fg="white",
-                     bg="black")
-#collaborative_Button = Button(root, image=co_Button, command=collaborative, borderwidth=0, bg="black")
-#content_Button = Button(root, image=ct_Button, command=content, borderwidth=0)
+# top 30 neighbors for each user
+sim_user_30 = find_n_neighbors(similarity_with_user, 10)
+sim_user_30.head()
 
-collaborative_Button = Button(root, text="Collaborative Filtering", font="Verdana 15", command=collaborative)
-content_Button = Button(root, text="Content Filtering", font="Verdana 15", command=content)
+# top 30 neighbors for each user
+sim_user_30_b = find_n_neighbors(similarity_with_movie, 10)
+sim_user_30_b.head()
 
-first_Label.place(x=130, y=70)
-second_Label.place(x=120, y=100)
-collaborative_Button.place(x=210, y=180)
-content_Button.place(x=210, y=270)
 
-root.mainloop()
+def get_user_similar_movies(user1, user2):
+    common_movies = rating_avg[rating_avg.userId == user1].merge(rating_avg[rating_avg.userId == user2], on='movieId',
+                                                                 how='inner')
+    return common_movies.merge(movies, on='movieId')
 
-#main.GUI_Output()
+
+a = get_user_similar_movies(370, 86309)
+a = a.loc[:, ['rating_x_x', 'rating_x_y', 'title']]
+a.head()
+
+# def User_item_score(user,item):
+#   a = sim_user_30_b[sim_user_30_b.index == user].values
+#  b = a.squeeze().tolist()
+#   c = final_movie.loc[:, item]
+#  d = c[c.index.isin(b)]
+#  f = d[d.notnull()]
+#  avg_user = mean.loc[mean['userId'] == user, 'rating'].values[0]
+# index = f.index.values.squeeze().tolist()
+# corr = similarity_with_movie.loc[user, index]
+# fin = pd.concat([f, corr], axis=1)
+# fin.columns = ['adg_score', 'correlation']
+# fin['score'] = fin.apply(lambda x: x['adg_score'] * x['correlation'], axis=1)
+# nume = fin['score'].sum()
+# deno = fin['correlation'].sum()
+# final_score = avg_user + (nume / deno)
+# return final_score
+
+# score = User_item_score(320,7371)
+# print("score(u,i) is", score)
+
+rating_avg = rating_avg.astype({"movieId": str})
+Movie_user = rating_avg.groupby(by='userId')['movieId'].apply(lambda x: ','.join(x))
+
+
+def User_item_score1(user):
+    Movie_seen_by_user = check.columns[check[check.index == user].notna().any()].tolist()
+    a = sim_user_30_b[sim_user_30_b.index == user].values
+    b = a.squeeze().tolist()
+    d = Movie_user[Movie_user.index.isin(b)]
+    l = ','.join(d.values)
+    Movie_seen_by_similar_users = l.split(',')
+    Movies_under_consideration = list(set(Movie_seen_by_similar_users) - set(list(map(str, Movie_seen_by_user))))
+    Movies_under_consideration = list(map(int, Movies_under_consideration))
+    score = []
+    for item in Movies_under_consideration:
+        c = final_movie.loc[:, item]
+        d = c[c.index.isin(b)]
+        f = d[d.notnull()]
+        avg_user = mean.loc[mean['userId'] == user, 'rating'].values[0]
+        index = f.index.values.squeeze().tolist()
+        corr = similarity_with_movie.loc[user, index]
+        fin = pd.concat([f, corr], axis=1)
+        fin.columns = ['adg_score', 'correlation']
+        fin['score'] = fin.apply(lambda x: x['adg_score'] * x['correlation'], axis=1)
+        nume = fin['score'].sum()
+        deno = fin['correlation'].sum()
+        final_score = avg_user + (nume / deno)
+        score.append(final_score)
+    data = pd.DataFrame({'movieId': Movies_under_consideration, 'score': score})
+    top_5_recommendation = data.sort_values(by='score', ascending=False).head(5)
+    Movie_Name = top_5_recommendation.merge(movies, how='inner', on='movieId')
+    Movie_Names = Movie_Name.title.values.tolist()
+    return Movie_Names
+
+
+# last row of dataframe = active user
+user = ratings.iloc[-1]['userId']
+
+
+def GUI_Output():
+    list = []
+    predicted_movies = User_item_score1(user)
+
+    for i in predicted_movies:
+        list.append(i)
+
+    return list
+
 
