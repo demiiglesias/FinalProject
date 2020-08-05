@@ -16,7 +16,19 @@ df['genres'] = df['genres'].fillna('[]').apply(literal_eval).apply(
     lambda x: [i['name'] for i in x] if isinstance(x, list) else [])
 
 
+def naming_changes(genre_str):
+    if genre_str == "Children":
+        genre_str = "Family"
+    elif genre_str == "Sci-Fi":
+        genre_str = "Science Fiction"
+    elif genre_str == "Musical":
+        genre_str = "Music"
+
+    return genre_str
+
+
 def get_movies_from_genre(genre_str):
+    genre_str = naming_changes(genre_str)
     genre_df = df
     genre_df['popularity'] = genre_df['popularity'].astype('float')
     filt = genre_df['genres'].apply(lambda y: genre_str in y)
