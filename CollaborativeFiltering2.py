@@ -3,8 +3,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-def find_movie_Id(movie):
 
+def find_movie_Id(movie):
     ID = -1
     # looks through all movies in title column
     for row in movies.itertuples():
@@ -12,6 +12,7 @@ def find_movie_Id(movie):
             # ID is assigned to movie selected
             ID = row.movieId
     return ID
+
 
 # creates movie dataframe
 movies = pd.read_csv("movies.csv")
@@ -25,6 +26,7 @@ for x in movies['title']:
 
 movies['title'] = title_col
 
+
 def find_movie_ID_2(movie):
     ID = -1
     # looks through all movies in title column
@@ -34,13 +36,13 @@ def find_movie_ID_2(movie):
             ID = row.movieId
     return ID
 
-def write_to_file(convert):
 
+def write_to_file(convert):
     keys = []
     values = []
-    #list of keys
+    # list of keys
     keys_list = convert.keys()
-    #list of values
+    # list of values
     values_list = convert.values()
 
     for key in keys_list:
@@ -49,19 +51,19 @@ def write_to_file(convert):
     for value in values_list:
         values.append(value)
 
-    print("MovieId:",keys)
+    print("MovieId:", keys)
 
     key1 = keys[0]
     value1 = values[0]
     float_value1 = float(value1)
 
-    line1 = "611," + str(key1) +"," + str(float_value1) + ",1"
+    line1 = "611," + str(key1) + "," + str(float_value1) + ",1"
 
     key2 = keys[1]
     value2 = values[1]
     float_value2 = float(value2)
 
-    line2 = "611," + str(key2) +"," + str(float_value2) + ",1"
+    line2 = "611," + str(key2) + "," + str(float_value2) + ",1"
 
     key3 = keys[2]
     value3 = values[2]
@@ -79,10 +81,10 @@ def write_to_file(convert):
     value5 = values[4]
     float_value5 = float(value5)
 
-    line5 = "611," + str(key5) +"," + str(float_value5) + ",1"
+    line5 = "611," + str(key5) + "," + str(float_value5) + ",1"
 
     # add user information to csv file, USER INFO IS REGISTERED AS USER 611
-    with open("ratings.csv",'a', newline='') as file:
+    with open("ratings.csv", 'a', newline='') as file:
         file.write("\n")
         file.write(line1)
         file.write("\n")
@@ -220,6 +222,7 @@ def User_item_score1(user):
 # last row of dataframe = active user
 user = ratings.iloc[-1]['userId']
 
+
 def GUI_Output():
     list = []
     predicted_movies = User_item_score1(user)
@@ -228,3 +231,4 @@ def GUI_Output():
         list.append(i)
 
     return list
+

@@ -38,6 +38,9 @@ def content():
     top.mainloop()
 
 
+# rating1 = Spinbox(c, from_=0, to=5, width=3)
+#     rating1.pack(
+
 def collaborative():
     window1 = Toplevel()
     window1.title('Collaborative Based Filtering')
@@ -149,67 +152,33 @@ def collaborative():
         mv2 = Label(window2, text=movies_three_four).place(x=30, y=220)
         mv3 = Label(window2, text=movie_five_six).place(x=30, y=320)
 
-        def mini_win():
-            mini_window = Tk()
-            mini_window.title('Rate Movies you have seen')
-            user_title_label = Label(mini_window, text="Please enter your favorite movie:")
-            user_title_label.grid(row=0, column=0)
-            user_movie_input = Entry(mini_window)
-            user_movie_input.grid(row=0, column=1)
-            user_liked_movies_list = []
-            # Returns user input when mini window is open
-            def retrieve_movies():
-                movie = user_movie_input.get()
-                user_liked_movies_list.append(movie)
-                return movie
+        # Text Box for window 2 user entry
+        d = Label(window2, text='Insert your favorite movie', font="Verdana 15")
+        d.place(x=360, y=30)
+        u_input = Entry(window2).place(x=365, y=60)
 
-            # To retrieve value when enter is selected
-            enter_button = ttk.Button(mini_window, text="Enter", command=retrieve_movies)
-            enter_button.grid(row=3, column=0)
+        def give_Rec():
 
-            def give_Rec():
-                    window2.destroy()
-                    mini_window.destroy()
-                    last_window = Toplevel()
-                    last_window.title('Movies Recommended for you')
-                    header = Label(last_window,text='Movies Recommended for you based on other users who liked ' +user_liked_movies_list[0] + ' as well!').place(x=100,y=20)
-                    #=====================Recommend Movies Based on User-Item Based Filtering================#
-                    #change to for loop?
-                    list_of_recommended_movies = Item_Item.rec(user_liked_movies_list[0])
-                    mv1 = Label(last_window, text=str(1.) + '. ' + list_of_recommended_movies[0]).place(x=200, y=100)
-                    mv2 = Label(last_window, text=str(2.) + '. ' + list_of_recommended_movies[1]).place(x=200, y=120)
-                    mv3 = Label(last_window, text=str(3.) + '. ' + list_of_recommended_movies[2]).place(x=200, y=140)
-                    mv4 = Label(last_window, text=str(4.) + '. ' + list_of_recommended_movies[3]).place(x=200, y=160)
-                    mv5 = Label(last_window, text=str(5.) + '. ' + list_of_recommended_movies[4]).place(x=200, y=180)
-                    mv6 = Label(last_window, text=str(6.) + '. ' + list_of_recommended_movies[5]).place(x=200, y=200)
-                    mv7 = Label(last_window, text=str(7.) + '. ' + list_of_recommended_movies[6]).place(x=200, y=220)
-                    mv8 = Label(last_window, text=str(8.) + '. ' + list_of_recommended_movies[7]).place(x=200, y=240)
-                    mv9 = Label(last_window, text=str(9.) + '. ' + list_of_recommended_movies[8]).place(x=200, y=260)
-                    mv10 = Label(last_window, text=str(10) + '. ' + list_of_recommended_movies[9]).place(x=200, y=280)
-                    last_window.geometry("700x500")
+            window2.destroy()
+            last_window = Toplevel()
+            last_window.title('Movies Recommended for you')
+            last_window.geometry("700x500")
 
+            # ===================Recommend movies based on Item-Based Filtering=======================
+            # mv4 = Label(last_window, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=200, y=100)
+            # mv5 = Label(last_window, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=200, y=120)
+            # mv6 = Label(last_window, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=200, y=140)
+            # mv7 = Label(last_window, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=200, y=160)
+            # mv8 = Label(last_window, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=200, y=180)
+            recommendations = Item_Item.rec(str(u_input))
+            recommendations_display = Label(last_window, text=recommendations).place(x=240, y=140)
 
-            Final_button = ttk.Button(mini_window, text="Get Recommendations", command=give_Rec)
-            Final_button.grid(row=3,column=1)
+        enter_window2 = Button(window2, text="Enter", command=give_Rec).place(x=350, y=400)
 
-        mini_window_button = ttk.Button(window2, text="Next", command=mini_win).place(x=350, y=400)
         window2.mainloop()
 
     next3 = ttk.Button(window1, text="Next", command=show).place(x=350, y=400)
     window1.mainloop()
-
-    """ 
-         # ===================Recommend movies based on Item-Based Filtering=======================
-         # mv4 = Label(last_window, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=200, y=100)
-         # mv5 = Label(last_window, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=200, y=120)
-         # mv6 = Label(last_window, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=200, y=140)
-         # mv7 = Label(last_window, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=200, y=160)
-         # mv8 = Label(last_window, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=200, y=180)
-         #recommendations = Item_Item.rec(str(user_input))
-        # recommendations_display = Label(last_window, text=recommendations).place(x=240, y=140)
-
-     enter_window2 = Button(window2, text="Enter", command=give_Rec).place(x=350, y=400)
-     """
 
 
 ct_Button = PhotoImage(file='content.png')
