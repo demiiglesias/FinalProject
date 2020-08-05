@@ -1,8 +1,6 @@
 # FinalProject: Python Movie Recommender System
 
-Recommendation systems are an important application of data science. They provide recommendations of items to sell to users on Amazon and movies/shows to watch on streaming platforms such as Netflix. The most applied approaches to recommendation based systems:
-Collaborative filtering
-Content based filtering
+Recommendation systems are an important application of data science. They provide recommendations of items to sell to users on Amazon and movies/shows to watch on streaming platforms such as Netflix. The most applied approaches to recommendation based systems are Collaborative filtering and Content based filtering.
 Collaborative filtering is a method of recommending products to customers using their past behaviors or ratings as well as similar decisions by other customers to predict which items might be appealing to the original customers. 
 Content-based filtering suggests products to customers by using the characteristics of an item in order to recommend additional items with similar properties. Collaborative filtering is also more popular for recommendations where there is a limited amount of data by each user or item.
 
