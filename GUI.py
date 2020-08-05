@@ -59,7 +59,7 @@ def collaborative():
     children = IntVar()
     chk = Checkbutton(c, text="Family", variable=children).place(x=60, y=60)
     sci_fi = IntVar()
-    chk = Checkbutton(c, text="Science-Fiction", variable=sci_fi).place(x=60, y=80)
+    chk = Checkbutton(c, text="Science Fiction", variable=sci_fi).place(x=60, y=80)
     adventure = IntVar()
     chk = Checkbutton(c, text="Adventure", variable=adventure).place(x=60, y=100)
     animation = IntVar()
@@ -83,7 +83,7 @@ def collaborative():
     war = IntVar()
     chk = Checkbutton(c, text="War", variable=war).place(x=60, y=300)
     musical = IntVar()
-    chk = Checkbutton(c, text="Musical", variable=musical).place(x=60, y=320)
+    chk = Checkbutton(c, text="Music", variable=musical).place(x=60, y=320)
 
     western = IntVar()
     chk = Checkbutton(c, text="Western", variable=western).place(x=60, y=340)
@@ -102,7 +102,7 @@ def collaborative():
             list_of_movie_genres.append("Animation")
 
         if sci_fi.get() == 1:
-            list_of_movie_genres.append("Science-Fiction")
+            list_of_movie_genres.append("Science Fiction")
 
         if children.get() == 1:
             list_of_movie_genres.append("Family")
@@ -135,7 +135,7 @@ def collaborative():
             list_of_movie_genres.append("War")
 
         if musical.get() == 1:
-            list_of_movie_genres.append("Musical")
+            list_of_movie_genres.append("Music")
 
         if western.get() == 1:
             list_of_movie_genres.append("Western")

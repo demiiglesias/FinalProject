@@ -2,8 +2,9 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-#8/4/2020 6:43 test comment
+
 def find_movie_Id(movie):
+
     ID = -1
     # looks through all movies in title column
     for row in movies.itertuples():
@@ -14,7 +15,6 @@ def find_movie_Id(movie):
 
 # creates movie dataframe
 movies = pd.read_csv("movies.csv")
-
 title_col = []
 for x in movies['title']:
     substring = x[:x.rfind("(") - 1]
@@ -25,8 +25,17 @@ for x in movies['title']:
 
 movies['title'] = title_col
 
+def find_movie_ID_2(movie):
+    ID = -1
+    # looks through all movies in title column
+    for row in movies.itertuples():
+        if movie == row.title:
+            # ID is assigned to movie selected
+            ID = row.movieId
+    return ID
 
 def write_to_file(convert):
+
     keys = []
     values = []
     #list of keys
@@ -39,6 +48,8 @@ def write_to_file(convert):
 
     for value in values_list:
         values.append(value)
+
+    print("MovieId:",keys)
 
     key1 = keys[0]
     value1 = values[0]
@@ -133,11 +144,11 @@ def find_n_neighbors(df, n):
 
 
 # top 30 neighbors for each user
-sim_user_30 = find_n_neighbors(similarity_with_user, 10)
+sim_user_30 = find_n_neighbors(similarity_with_user, 30)
 sim_user_30.head()
 
 # top 30 neighbors for each user
-sim_user_30_b = find_n_neighbors(similarity_with_movie, 10)
+sim_user_30_b = find_n_neighbors(similarity_with_movie, 30)
 sim_user_30_b.head()
 
 
@@ -209,7 +220,6 @@ def User_item_score1(user):
 # last row of dataframe = active user
 user = ratings.iloc[-1]['userId']
 
-
 def GUI_Output():
     list = []
     predicted_movies = User_item_score1(user)
@@ -218,4 +228,3 @@ def GUI_Output():
         list.append(i)
 
     return list
-
