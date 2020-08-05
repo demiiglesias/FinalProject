@@ -49,10 +49,6 @@ def collaborative():
     m = Label(window1, text='Pick 3 of your favorite genres ', font="Verdana 15")
     m.place(x=60, y=10)
 
-    # d = Label(window1, text='Insert your favorite movie', font="Verdana 15")
-    # d.place(x=360, y=10)
-    # input = Entry(window1).place(x=365, y=40)
-
     # Genres for check-box
     action = IntVar()
     chk = Checkbutton(window1, text="Action", variable=action).place(x=60, y=40)
@@ -90,8 +86,11 @@ def collaborative():
 
     def show():
         window1.destroy()
-        list_of_movie_genres = []
+        window2 = Toplevel()
+        window2.title('Movies')
+        window2.geometry("700x500")
 
+        list_of_movie_genres = []
         if action.get() == 1:
             list_of_movie_genres.append("Action")
 
@@ -140,18 +139,10 @@ def collaborative():
         if western.get() == 1:
             list_of_movie_genres.append("Western")
 
-        window2 = Toplevel()
-        window2.title('Movies')
-        window2.geometry("700x500")
-
-        x = Label(window2, text='Here are some movies you may like ', font="Verdana 15").place(x=20, y=30)
-        # y = Label(window2, text='Please rate 5 window2 ', font="Verdana 15").place(x=400, y=30)
-        # extra = Label(window2, text='Movies similar to your favorite movie:', font="Verdana 15").place(x=350, y=30)
-        d = Label(window2, text='Insert your favorite movie', font="Verdana 15").place(x=350, y=30)
-        input = Entry(window2).place(x=355, y=70)
-        genre_1 = Label(window2, text=list_of_movie_genres[0], font="Verdana 15").place(x=30, y=80)
-        genre_2 = Label(window2, text=list_of_movie_genres[1], font="Verdana 15").place(x=30, y=180)
-        genre_3 = Label(window2, text=list_of_movie_genres[2], font="Verdana 15").place(x=30, y=280)
+        Label(window2, text='Here are some movies you may like ', font="Verdana 15").place(x=20, y=30)
+        Label(window2, text=list_of_movie_genres[0], font="Verdana 15").place(x=30, y=80)
+        Label(window2, text=list_of_movie_genres[1], font="Verdana 15").place(x=30, y=180)
+        Label(window2, text=list_of_movie_genres[2], font="Verdana 15").place(x=30, y=280)
 
         movies_one_two = movie_fetcher.get_movies_from_genre(list_of_movie_genres[0])
         movies_three_four = movie_fetcher.get_movies_from_genre(list_of_movie_genres[1])
@@ -161,104 +152,28 @@ def collaborative():
         mv2 = Label(window2, text=movies_three_four).place(x=30, y=220)
         mv3 = Label(window2, text=movie_five_six).place(x=30, y=320)
 
-        # mv4 = Label(window2, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=350, y=70)
-        # mv5 = Label(window2, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=350, y=90)
-        # mv6 = Label(window2, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=350, y=110)
-        # mv7 = Label(window2, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=350, y=130)
-        # mv8 = Label(window2, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=350, y=150)
+        # Text Box for window 2 user entry
+        d = Label(window2, text='Insert your favorite movie', font="Verdana 15")
+        d.place(x=360, y=30)
+        input = Entry(window2).place(x=365, y=60)
 
-        def mini_win():
+        def give_Rec():
+            window2.destroy()
+            last_window = Toplevel()
+            last_window.title('Movies Recommended for you')
+            last_window.geometry("700x500")
 
-            window3 = Tk()
-            window3.title('Rate Movies you have seen')
-            user_title_label = Label(window3, text="Please enter title of a movie you have seen in the list:")
-            user_title_label.grid(row=0, column=0)
-            user_movie_input = Entry(window3)
-            user_movie_input.grid(row=0, column=1)
-            rating_label = Label(window3, text="Please enter a rating:")
-            rating_label.grid(row=1, column=0)
-            user_rating = Entry(window3)
-            user_rating.grid(row=1, column=1)
-            dict = {}
-            count = 5
+            # ===================Recommend movies based on Item-Based Filtering=======================
+            mv4 = Label(last_window, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=200, y=100)
+            mv5 = Label(last_window, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=200, y=120)
+            mv6 = Label(last_window, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=200, y=140)
+            mv7 = Label(last_window, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=200, y=160)
+            mv8 = Label(last_window, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=200, y=180)
 
-            def retrieve_movies():
-                movie = user_movie_input.get()
-                rating = user_rating.get()
-                dict[movie] = rating
-                print("dict", dict)
-                str_count = str(count - len(dict))
-                num_movies_rated_label = Label(window3, text="# window2 left to rate: " + str_count)
-                num_movies_rated_label.grid(row=4, column=1)
-
-                return dict
-
-            # To retrieve value when enter is selected
-            enter_button = ttk.Button(window3, text="Enter", command=retrieve_movies)
-            enter_button.grid(row=3, column=0)
-
-            def clear():
-                user_movie_input.delete(0, 'end')
-                user_rating.delete(0, 'end')
-
-            clear_button = ttk.Button(window3, text="Clear text", command=clear)
-            clear_button.grid(row=3, column=1)
-
-            def give_Rec():
-                window3.destroy()
-                window2.destroy()
-                last_window = Toplevel()
-                last_window.title('Movies Recommended for you')
-                last_window.geometry("700x500")
-                # returns list of window2
-
-                keys_ = []
-                values_ = []
-
-                # list of keys
-                keys_list = dict.keys()
-
-                # list of values
-                values_list1 = dict.values()
-                for key in keys_list:
-                    keys_.append(key)
-
-                for value in values_list1:
-                    values_.append(value)
-
-                convert = {CollaborativeFiltering2.find_movie_Id(keys_[0]): values_[0],
-                           CollaborativeFiltering2.find_movie_Id(keys_[1]): values_[1],
-                           CollaborativeFiltering2.find_movie_Id(keys_[2]): values_[2],
-                           CollaborativeFiltering2.find_movie_Id(keys_[3]): values_[3],
-                           CollaborativeFiltering2.find_movie_Id(keys_[4]): values_[4]}
-
-                print("convert list:", convert)
-
-                CollaborativeFiltering2.write_to_file(convert)
-                # Item_Item.write_to_file()
-
-                list_of_recommended_movies = CollaborativeFiltering2.GUI_Output()
-                a = Label(last_window, text='Movies Recommended For You', font="Verdana 15").place(x=60, y=0)
-                mv = Label(last_window, text="1. " + list_of_recommended_movies[0]).place(x=60, y=120)
-                mv = Label(last_window, text="2. " + list_of_recommended_movies[1]).place(x=60, y=140)
-                mv = Label(last_window, text="3. " + list_of_recommended_movies[2]).place(x=60, y=160)
-                mv = Label(last_window, text="4. " + list_of_recommended_movies[3]).place(x=60, y=180)
-                mv = Label(last_window, text="5. " + list_of_recommended_movies[4]).place(x=60, y=200)
-                exit_Button1 = ttk.Button(last_window, text="Click to Exit", command=last_window.destroy).place(x=300,
-                                                                                                                y=400)
-
-            open_last_window = ttk.Button(window3, text="Get Recommendations", command=give_Rec)
-            open_last_window.grid(row=4, column=0)
-
-            # num_movies_rated_label = Label(window3, text="# window2 left to rate: " + str_count)
-            # num_movies_rated_label.grid(row=4, column=1)
-
-        # opens window3
-        next2 = ttk.Button(window2, text="Click here to rate movies", command=mini_win).place(x=460, y=380)
+        enter_window2 = Button(window2, text="Enter", command=give_Rec).place(x=350, y=400)
 
         window2.mainloop()
 
-    # opens next window
     next3 = ttk.Button(window1, text="Next", command=show).place(x=350, y=400)
     window1.mainloop()
 
