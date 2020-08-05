@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.neighbors import NearestNeighbors
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 
@@ -8,9 +7,6 @@ def rec(movie):
     additional_movies = []
     movies_df = pd.read_csv('movies.csv', usecols=['movieId', 'title'])
     rating_df = pd.read_csv('ratings.csv', usecols=['userId', 'movieId', 'rating'])
-    # movies_df = pd.read_csv('movies.csv', usecols=['movieId', 'title'], dtype={'movieId': 'int32', 'title': 'str'})
-    # rating_df = pd.read_csv('ratings.csv', usecols=['userId', 'movieId', 'rating'],
-    # dtype={'userId': 'int32', 'movieId': 'int32', 'rating': 'float32'})
 
     df = pd.merge(rating_df, movies_df, on='movieId')
 
@@ -77,26 +73,9 @@ def rec(movie):
             # writes recommended movies to list
             additional_movies.append(title)
 
-    # print("movie_features_df: ")
-    # print(movie_features_df)
-    # print()
-    #
-    # letters = {'A', 'B', 'C'}
-    # for i in letters:
-    #     print("Letters List: ")
-    #     print(i)
-
-    # additional_movies = movie_features_df['title']
-    # additional_movies = additional_movies
-    # print("Type of additional_movies")
-    # print(type(additional_movies))
-
-    return additional_movies
+    df_final = pd.DataFrame(additional_movies)
+    return df_final[0].to_string(index=False)
 
 
-# def fix_me(movies):
-#
-#
-#     return movies
 
 
