@@ -151,35 +151,48 @@ def collaborative():
         mv = Label(window2, text=movies_one_two).place(x=30, y=120)
         mv2 = Label(window2, text=movies_three_four).place(x=30, y=220)
         mv3 = Label(window2, text=movie_five_six).place(x=30, y=320)
+        # place(x=365, y=60)
 
-        # Text Box for window 2 user entry
-        d = Label(window2, text='Insert your favorite movie', font="Verdana 15")
-        d.place(x=360, y=30)
-        u_input = Entry(window2).place(x=365, y=60)
-        
+        user_title_label = Label(window2, text="Please enter your favorite movie:")
+        user_title_label.place(x=360, y=30)
+        user_input = Entry(window2, width=30)
+        user_input.place(x=365, y=60)
+
+        # stores user liked
+        user_liked_movies_list = []
+
         def give_Rec():
-
+            final_input = user_input.get()
+            # destroy() closes previous windows except the first
             window2.destroy()
+            # mini_window.destroy()
             last_window = Toplevel()
-            last_window.title('Movies Recommended for you')
             last_window.geometry("700x500")
-            u = u_input.get()
-            # ===================Recommend movies based on Item-Based Filtering=======================
-            # mv4 = Label(last_window, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=200, y=100)
-            # mv5 = Label(last_window, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=200, y=120)
-            # mv6 = Label(last_window, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=200, y=140)
-            # mv7 = Label(last_window, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=200, y=160)
-            # mv8 = Label(last_window, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=200, y=180)
-            recommendations = Item_Item.rec(str(u))
-            print(u)
-            # for i in recommendations:
-            #     yaxis = yaxis + 20
-            #     Label(last_window, text=recommendations(i)).place(x=240, y=140 + yaxis)
 
-            recommendations_display = Label(last_window, text=recommendations)
-            recommendations_display.place(x=240, y=140)
+            last_window.title('Movies Recommended for you')
 
-        enter_window2 = Button(window2, text="Enter", command=give_Rec).place(x=350, y=400)
+
+            # =====================Recommend Movies Based on User-Item Based Filtering================#
+            # change to for loop?
+            # list_of_recommended_movies = User_Item_filtering.rec(user_liked_movies_list[0])
+            user_liked_movies_list.append(final_input)
+            recommendations = Item_Item.rec(str(user_liked_movies_list[0]))
+            for i in recommendations:
+                recommendations_display = Label(last_window, text=recommendations).place(x=240, y=120)
+
+            # mv1 = Label(last_window, text='1. ' + list_of_recommended_movies[0]).place(x=200, y=100)
+
+            # Convert is a dictionary of movieIds, and ratings.{MovieId,4.0}
+            # It is used for UserId, movieId, and rating of that movie is used to make the comparison between users
+            # convert = {CollaborativeFiltering2.find_movie_Id(keys_[0]): values_[0]}
+
+            # CollaborativeFiltering2.write_to_file(convert)
+            # user_user_filtering_recommendations = CollaborativeFiltering2.GUI_Output()
+            # rec1 = Label(last_window, text=str(1.) + '. ' + user_user_filtering_recommendations[0]).place(x=200, y=420)
+            # rec2 = Label(last_window, text=str(2.) + '. ' + user_user_filtering_recommendations[1]).place(x=200, y=440)
+
+        window2_enter = ttk.Button(window2, text="Next", command=give_Rec).place(x=350, y=400)
+        # opens up the small window to input title of favorite movie and get recommendations based off that input
 
         window2.mainloop()
 

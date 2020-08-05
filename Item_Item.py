@@ -9,10 +9,9 @@ def rec(movie):
     rating_df = pd.read_csv('ratings.csv', usecols=['userId', 'movieId', 'rating'])
 
     df = pd.merge(rating_df, movies_df, on='movieId')
-
-    # To remove date from "title" column
     title_col = []
 
+    # To remove date from "title" column
     for x in df['title']:
         substring = x[:x.rfind("(") - 1]
         try:
@@ -75,7 +74,5 @@ def rec(movie):
 
     df_final = pd.DataFrame(additional_movies)
     return df_final[0].to_string(index=False)
-
-
 
 
