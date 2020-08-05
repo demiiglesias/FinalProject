@@ -156,22 +156,28 @@ def collaborative():
         d = Label(window2, text='Insert your favorite movie', font="Verdana 15")
         d.place(x=360, y=30)
         u_input = Entry(window2).place(x=365, y=60)
-
+        
         def give_Rec():
 
             window2.destroy()
             last_window = Toplevel()
             last_window.title('Movies Recommended for you')
             last_window.geometry("700x500")
-
+            u = u_input.get()
             # ===================Recommend movies based on Item-Based Filtering=======================
             # mv4 = Label(last_window, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=200, y=100)
             # mv5 = Label(last_window, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=200, y=120)
             # mv6 = Label(last_window, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=200, y=140)
             # mv7 = Label(last_window, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=200, y=160)
             # mv8 = Label(last_window, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=200, y=180)
-            recommendations = Item_Item.rec(str(u_input))
-            recommendations_display = Label(last_window, text=recommendations).place(x=240, y=140)
+            recommendations = Item_Item.rec(str(u))
+            print(u)
+            # for i in recommendations:
+            #     yaxis = yaxis + 20
+            #     Label(last_window, text=recommendations(i)).place(x=240, y=140 + yaxis)
+
+            recommendations_display = Label(last_window, text=recommendations)
+            recommendations_display.place(x=240, y=140)
 
         enter_window2 = Button(window2, text="Enter", command=give_Rec).place(x=350, y=400)
 
