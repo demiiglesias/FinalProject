@@ -42,54 +42,54 @@ def content():
 #     rating1.pack(
 
 def collaborative():
-    c = Toplevel()
-    c.title('Collaborative Based Filtering')
-    c.geometry("700x500")
+    window1 = Toplevel()
+    window1.title('Collaborative Based Filtering')
+    window1.geometry("700x500")
 
-    m = Label(c, text='Pick 3 of your favorite genres ', font="Verdana 15")
+    m = Label(window1, text='Pick 3 of your favorite genres ', font="Verdana 15")
     m.place(x=60, y=10)
 
-    d = Label(c, text='Insert your favorite movie', font="Verdana 15")
-    d.place(x=360, y=10)
-    input = Entry(c).place(x=365, y=40)
+    # d = Label(window1, text='Insert your favorite movie', font="Verdana 15")
+    # d.place(x=360, y=10)
+    # input = Entry(window1).place(x=365, y=40)
 
     # Genres for check-box
     action = IntVar()
-    chk = Checkbutton(c, text="Action", variable=action).place(x=60, y=40)
+    chk = Checkbutton(window1, text="Action", variable=action).place(x=60, y=40)
     children = IntVar()
-    chk = Checkbutton(c, text="Family", variable=children).place(x=60, y=60)
+    chk = Checkbutton(window1, text="Family", variable=children).place(x=60, y=60)
     sci_fi = IntVar()
-    chk = Checkbutton(c, text="Science Fiction", variable=sci_fi).place(x=60, y=80)
+    chk = Checkbutton(window1, text="Science Fiction", variable=sci_fi).place(x=60, y=80)
     adventure = IntVar()
-    chk = Checkbutton(c, text="Adventure", variable=adventure).place(x=60, y=100)
+    chk = Checkbutton(window1, text="Adventure", variable=adventure).place(x=60, y=100)
     animation = IntVar()
-    chk = Checkbutton(c, text="Animation", variable=animation).place(x=60, y=120)
+    chk = Checkbutton(window1, text="Animation", variable=animation).place(x=60, y=120)
     comedy = IntVar()
-    chk = Checkbutton(c, text="Comedy", variable=comedy).place(x=60, y=140)
+    chk = Checkbutton(window1, text="Comedy", variable=comedy).place(x=60, y=140)
     thriller = IntVar()
-    chk = Checkbutton(c, text="Thriller", variable=thriller).place(x=60, y=160)
+    chk = Checkbutton(window1, text="Thriller", variable=thriller).place(x=60, y=160)
     romance = IntVar()
-    chk = Checkbutton(c, text="Romance", variable=romance).place(x=60, y=180)
+    chk = Checkbutton(window1, text="Romance", variable=romance).place(x=60, y=180)
     horror = IntVar()
-    chk = Checkbutton(c, text="Horror", variable=horror).place(x=60, y=200)
+    chk = Checkbutton(window1, text="Horror", variable=horror).place(x=60, y=200)
     drama = IntVar()
-    chk = Checkbutton(c, text="Drama", variable=drama).place(x=60, y=220)
+    chk = Checkbutton(window1, text="Drama", variable=drama).place(x=60, y=220)
     crime = IntVar()
-    chk = Checkbutton(c, text="Crime", variable=crime).place(x=60, y=240)
+    chk = Checkbutton(window1, text="Crime", variable=crime).place(x=60, y=240)
     mystery = IntVar()
-    chk = Checkbutton(c, text="Mystery", variable=mystery).place(x=60, y=260)
+    chk = Checkbutton(window1, text="Mystery", variable=mystery).place(x=60, y=260)
     fantasy = IntVar()
-    chk = Checkbutton(c, text="Fantasy", variable=fantasy).place(x=60, y=280)
+    chk = Checkbutton(window1, text="Fantasy", variable=fantasy).place(x=60, y=280)
     war = IntVar()
-    chk = Checkbutton(c, text="War", variable=war).place(x=60, y=300)
+    chk = Checkbutton(window1, text="War", variable=war).place(x=60, y=300)
     musical = IntVar()
-    chk = Checkbutton(c, text="Music", variable=musical).place(x=60, y=320)
+    chk = Checkbutton(window1, text="Music", variable=musical).place(x=60, y=320)
 
     western = IntVar()
-    chk = Checkbutton(c, text="Western", variable=western).place(x=60, y=340)
+    chk = Checkbutton(window1, text="Western", variable=western).place(x=60, y=340)
 
     def show():
-        c.destroy()
+        window1.destroy()
         list_of_movie_genres = []
 
         if action.get() == 1:
@@ -140,43 +140,44 @@ def collaborative():
         if western.get() == 1:
             list_of_movie_genres.append("Western")
 
-        movies = Toplevel()
-        movies.title('Movies')
-        movies.geometry("700x500")
+        window2 = Toplevel()
+        window2.title('Movies')
+        window2.geometry("700x500")
 
-        x = Label(movies, text='Here are some movies you may like ', font="Verdana 15").place(x=20, y=30)
-        # y = Label(movies, text='Please rate 5 movies ', font="Verdana 15").place(x=400, y=30)
-        extra = Label(movies, text='Movies similar to your favorite movie:', font="Verdana 15").place(x=350, y=30)
-
-        genre_1 = Label(movies, text=list_of_movie_genres[0], font="Verdana 15").place(x=30, y=80)
-        genre_2 = Label(movies, text=list_of_movie_genres[1], font="Verdana 15").place(x=30, y=180)
-        genre_3 = Label(movies, text=list_of_movie_genres[2], font="Verdana 15").place(x=30, y=280)
+        x = Label(window2, text='Here are some movies you may like ', font="Verdana 15").place(x=20, y=30)
+        # y = Label(window2, text='Please rate 5 window2 ', font="Verdana 15").place(x=400, y=30)
+        # extra = Label(window2, text='Movies similar to your favorite movie:', font="Verdana 15").place(x=350, y=30)
+        d = Label(window2, text='Insert your favorite movie', font="Verdana 15").place(x=350, y=30)
+        input = Entry(window2).place(x=355, y=70)
+        genre_1 = Label(window2, text=list_of_movie_genres[0], font="Verdana 15").place(x=30, y=80)
+        genre_2 = Label(window2, text=list_of_movie_genres[1], font="Verdana 15").place(x=30, y=180)
+        genre_3 = Label(window2, text=list_of_movie_genres[2], font="Verdana 15").place(x=30, y=280)
 
         movies_one_two = movie_fetcher.get_movies_from_genre(list_of_movie_genres[0])
         movies_three_four = movie_fetcher.get_movies_from_genre(list_of_movie_genres[1])
         movie_five_six = movie_fetcher.get_movies_from_genre(list_of_movie_genres[2])
 
-        mv = Label(movies, text=movies_one_two).place(x=30, y=120)
-        mv2 = Label(movies, text=movies_three_four).place(x=30, y=220)
-        mv3 = Label(movies, text=movie_five_six).place(x=30, y=320)
+        mv = Label(window2, text=movies_one_two).place(x=30, y=120)
+        mv2 = Label(window2, text=movies_three_four).place(x=30, y=220)
+        mv3 = Label(window2, text=movie_five_six).place(x=30, y=320)
 
-        mv4 = Label(movies, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=350, y=70)
-        mv5 = Label(movies, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=350, y=90)
-        mv6 = Label(movies, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=350, y=110)
-        mv7 = Label(movies, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=350, y=130)
-        mv8 = Label(movies, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=350, y=150)
+        # mv4 = Label(window2, text='1. ' + Item_Item.get_rec_movies()[0]).place(x=350, y=70)
+        # mv5 = Label(window2, text='2. ' + Item_Item.get_rec_movies()[1]).place(x=350, y=90)
+        # mv6 = Label(window2, text='3. ' + Item_Item.get_rec_movies()[2]).place(x=350, y=110)
+        # mv7 = Label(window2, text='4. ' + Item_Item.get_rec_movies()[3]).place(x=350, y=130)
+        # mv8 = Label(window2, text='5. ' + Item_Item.get_rec_movies()[4]).place(x=350, y=150)
 
         def mini_win():
 
-            mini_window = Tk()
-            mini_window.title('Rate Movies you have seen')
-            user_title_label = Label(mini_window, text="Please enter title of a movie you have seen in the list:")
+            window3 = Tk()
+            window3.title('Rate Movies you have seen')
+            user_title_label = Label(window3, text="Please enter title of a movie you have seen in the list:")
             user_title_label.grid(row=0, column=0)
-            user_movie_input = Entry(mini_window)
+            user_movie_input = Entry(window3)
             user_movie_input.grid(row=0, column=1)
-            rating_label = Label(mini_window, text="Please enter a rating:")
+            rating_label = Label(window3, text="Please enter a rating:")
             rating_label.grid(row=1, column=0)
-            user_rating = Entry(mini_window)
+            user_rating = Entry(window3)
             user_rating.grid(row=1, column=1)
             dict = {}
             count = 5
@@ -187,29 +188,29 @@ def collaborative():
                 dict[movie] = rating
                 print("dict", dict)
                 str_count = str(count - len(dict))
-                num_movies_rated_label = Label(mini_window, text="# movies left to rate: " + str_count)
+                num_movies_rated_label = Label(window3, text="# window2 left to rate: " + str_count)
                 num_movies_rated_label.grid(row=4, column=1)
 
                 return dict
 
             # To retrieve value when enter is selected
-            enter_button = ttk.Button(mini_window, text="Enter", command=retrieve_movies)
+            enter_button = ttk.Button(window3, text="Enter", command=retrieve_movies)
             enter_button.grid(row=3, column=0)
 
             def clear():
                 user_movie_input.delete(0, 'end')
                 user_rating.delete(0, 'end')
 
-            clear_button = ttk.Button(mini_window, text="Clear text", command=clear)
+            clear_button = ttk.Button(window3, text="Clear text", command=clear)
             clear_button.grid(row=3, column=1)
 
             def give_Rec():
-                mini_window.destroy()
-                movies.destroy()
+                window3.destroy()
+                window2.destroy()
                 last_window = Toplevel()
                 last_window.title('Movies Recommended for you')
                 last_window.geometry("700x500")
-                # returns list of movies
+                # returns list of window2
 
                 keys_ = []
                 values_ = []
@@ -246,20 +247,20 @@ def collaborative():
                 exit_Button1 = ttk.Button(last_window, text="Click to Exit", command=last_window.destroy).place(x=300,
                                                                                                                 y=400)
 
-            open_last_window = ttk.Button(mini_window, text="Get Recommendations", command=give_Rec)
+            open_last_window = ttk.Button(window3, text="Get Recommendations", command=give_Rec)
             open_last_window.grid(row=4, column=0)
 
-            # num_movies_rated_label = Label(mini_window, text="# movies left to rate: " + str_count)
+            # num_movies_rated_label = Label(window3, text="# window2 left to rate: " + str_count)
             # num_movies_rated_label.grid(row=4, column=1)
 
-        # opens mini_window
-        next2 = ttk.Button(movies, text="Click here to rate movies", command=mini_win).place(x=460, y=380)
+        # opens window3
+        next2 = ttk.Button(window2, text="Click here to rate movies", command=mini_win).place(x=460, y=380)
 
-        movies.mainloop()
+        window2.mainloop()
 
     # opens next window
-    next3 = ttk.Button(c, text="Next", command=show).place(x=350, y=400)
-    c.mainloop()
+    next3 = ttk.Button(window1, text="Next", command=show).place(x=350, y=400)
+    window1.mainloop()
 
 
 ct_Button = PhotoImage(file='content.png')
