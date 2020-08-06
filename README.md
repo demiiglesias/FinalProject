@@ -27,5 +27,13 @@ Exit to return to the first window with menu options.
 
 ## Data
 The collaborative-based filtering data we will use comes from MovieLens and can be found at https://grouplens.org/datasets/movielens/ . We chose the “small” dataset of 100,000 ratings under the subheading “recommended for education and development”.
+Contains multiple CSV files that include:  (“Recommended for education and development; Small”)
+100,00 ratings of 9,000 movies made by 610 users, and 3,600 tag applications. Users did not rate every single movie listed.
+A list of these movies with associated genres
+A list of these movies with keywords/tags
 
 The content-based filtering data we will use comes from Kaggle and can be found at https://www.kaggle.com/rounakbanik/the-movies-dataset.
+
+
+
+
