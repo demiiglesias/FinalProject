@@ -1,14 +1,12 @@
 import pandas as pd
 import numpy as np
 import warnings
-# import time
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem.snowball import SnowballStemmer
 from ast import literal_eval
 
 warnings.simplefilter('ignore')
-# start_time = time.time()
 
 # =================  Display Settings =================
 desired_width = 640
@@ -41,8 +39,6 @@ df = df.merge(keywords, on='id')
 
 # =================  Prep before possibly using get_smaller_df =================
 # Changing Genres
-# from: [{'id': 10749, 'name': 'Romance'}, {'id': 35, 'name': 'Comedy'}]
-# to: [Romance, Comedy]
 df['genres'] = df['genres'].fillna('[]').apply(literal_eval).apply(
     lambda x: [i['name'] for i in x] if isinstance(x, list) else [])
 
@@ -66,8 +62,6 @@ def get_smaller_df(x):
 
 # Uncomment the line below if you want a much smaller df: from 46628 to 1298 rows
 df = get_smaller_df(df).drop(columns=['runtime'])
-
-# print("(*df = df) Time elapsed: {:.2f}s".format(time.time() - start_time))
 
 # =================  More Set-up =================
 # Making sure the information in these col are Python literal structures (strings, numbers, tuples, lists, dicts, booleans, or None)
@@ -129,13 +123,11 @@ df['keywords'] = df['keywords'].apply(lambda x: [stemmer.stem(i) for i in x])
 df['keywords'] = df['keywords'].apply(lambda x: [str.lower(i.replace(" ", "")) for i in x])
 
 # Create the soup col which is comprised of the col keywords, cast, director, and genres (twice as much keywords and director)
-# df['soup'] = df['keywords'] + df['cast'] + df['director'] + df['genres'] + df['genres']
 df['soup'] = df['keywords'] + df['cast'] + df['director'] + df['genres'] + df['keywords']
 # Turn the list into a long string with ' ' in between each word
 df['soup'] = df['soup'].apply(lambda x: ' '.join(x))
 
 # ================= Bag of Words  =================
-# print("(pre bagOfWords) Time elapsed: {:.2f}s".format(time.time() - start_time))
 
 vectorizer = CountVectorizer(analyzer='word', ngram_range=(1, 2), min_df=0, stop_words='english')
 # fit the df: figures out what all the words in the corpus are, and
@@ -150,9 +142,6 @@ cos_sim = cosine_similarity(v_zer_matrix, v_zer_matrix)
 # Setting up a way to easily be able to get the index when given a title
 df = df.reset_index()
 indices = pd.Series(df.index, index=df['title'])
-
-
-# print("(post bagOfWords) Time elapsed: {:.2f}s".format(time.time() - start_time))
 
 
 # ================= WR and Recommender Functions  =================
@@ -201,30 +190,3 @@ def recommender(movie_title):
     final_list = movies['title']
     final_list = final_list[0:10]
     return final_list.to_string(index=False)
-
-# # =================  Printing/Testing  =================
-# print("========= recommender('Finding Nemo') =========")
-# print(recommender('Finding Nemo'))
-# print()
-# print("========= recommender('Inception') =========")
-# print(recommender('Inception'))
-# print()
-# print("========= recommender('The Dark Knight') =========")
-# print(recommender('The Dark Knight'))
-# print()
-# print("========= recommender('Mean Girls') =========")
-# print(recommender('Mean Girls'))
-# print()
-# print("========= recommender('Kill Bill: Vol. 1') =========")
-# print(recommender('Kill Bill: Vol. 1'))
-# print()
-# print("========= recommender('Interstellar') =========")
-# print(recommender('Interstellar'))
-# print()
-# print("========= recommender('(500) Days of Summer') =========")
-# print(recommender('(500) Days of Summer'))
-# print()
-# print("========= recommender('WALL·E') =========")
-# print(recommender('WALL·E'))
-# print()
-# print("(*Last) Time elapsed: {:.2f}s".format(time.time() - start_time))
