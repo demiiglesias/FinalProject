@@ -2,6 +2,12 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
+# from scipy import spatial
+# result = 1 - spatial.distance.cosine(dataSetI, dataSetII)
+# from numpy import dot
+# from numpy.linalg import norm
+
+# cos_sim = dot(a, b)/(norm(a)*norm(b))
 
 # read files and create dataframes
 movies = pd.read_csv("movies2.csv")
@@ -67,11 +73,11 @@ rating_avg['adg_rating'] = rating_avg['rating_x'] - rating_avg['rating_y']
 
 check = pd.pivot_table(rating_avg, values='rating_x', index='userId', columns='movieId')
 
-complete = pd.pivot_table(rating_avg, values='adg_rating', index='userId', columns='movieId')
+final = pd.pivot_table(rating_avg, values='adg_rating', index='userId', columns='movieId')
 
 # Fixes sparse graph issue by inserting NAN values with a integer
-complete_movie_info = complete.fillna(complete.mean(axis=0))
-complete_user_info = complete.apply(lambda row: row.fillna(row.mean()), axis=1)
+final_movie = final.fillna(final.mean(axis=0))
+final_user = final.apply(lambda row: row.fillna(row.mean()), axis=1)
 
 
 def create_cosine_similarity(final):
@@ -84,7 +90,7 @@ def create_cosine_similarity(final):
     return similarity_with_user
 
 
-# KNN Nearest neighbors algorithm
+# KNN Nearest neighbors algorithim
 def find_n_neighbors(df, n):
     sort = np.argsort(df.values, axis=1)[:, :n]
     # updated dataframe with sorted values
@@ -94,9 +100,9 @@ def find_n_neighbors(df, n):
 
 
 # top 30 neighbors for each user
-users_in_neighborhood = find_n_neighbors(create_cosine_similarity(complete_user_info), 30)
+users_in_neighborhood = find_n_neighbors(create_cosine_similarity(final_user), 30)
 # top 30 neighbors for each user based off movie
-movies_in_neighborhood = find_n_neighbors(create_cosine_similarity(complete_movie_info), 30)
+movies_in_neighborhood = find_n_neighbors(create_cosine_similarity(final_movie), 30)
 
 rating_avg = rating_avg.astype({"movieId": str})
 Movie_user = rating_avg.groupby(by='userId')['movieId'].apply(lambda x: ','.join(x))
@@ -104,40 +110,32 @@ Movie_user = rating_avg.groupby(by='userId')['movieId'].apply(lambda x: ','.join
 
 def User_item_score1(user):
     Movie_seen_by_user = check.columns[check[check.index == user].notna().any()].tolist()
-    list_mv = movies_in_neighborhood[movies_in_neighborhood.index == user].values.squeeze().tolist()
+    semi_list_container = movies_in_neighborhood[movies_in_neighborhood.index == user].values.squeeze().tolist()
 
-    #find location of user in list
-    user_loc = Movie_user[Movie_user.index.isin(list_mv)]
-    merge = ','.join(user_loc.values)
+    # put in list container
+    # list_of_movies_used = movies_in_neighborhood.squeeze().tolist()
 
-    # separates movie titles in list
-    Movie_seen_by_similar_users = merge.split(',')
+    d = Movie_user[Movie_user.index.isin(semi_list_container)]
+    l = ','.join(d.values)
 
-    #compares similar users and active user
+    Movie_seen_by_similar_users = l.split(',')
+    # seperates movie titles in list
+
     Movies_under_consideration = list(set(Movie_seen_by_similar_users) - set(list(map(str, Movie_seen_by_user))))
     Movies_under_consideration = list(map(int, Movies_under_consideration))
 
     score = []
     for item in Movies_under_consideration:
-        located_movies = complete_movie_info.loc[:, item]
+        c = final_movie.loc[:, item]
 
-        search = located_movies[located_movies.index.isin(list_mv)]
+        d = c[c.index.isin(semi_list_container)]
 
-        # checks to see item is not null
-        checker = search[search.notnull()]
+        f = d[d.notnull()]
 
-        # update avg user information with UserId and the rating of user
         avg_user = mean.loc[mean['userId'] == user, 'rating'].values[0]
-        # put info in a list container
-        index = checker.index.values.squeeze().tolist()
-
-        corr = create_cosine_similarity(complete_movie_info).loc[user, index]
-
-
-        # create new dataframe with updated avg infromation
-        fin = pd.concat([checker, corr], axis=1)
-        fin.columns = ['adg', 'correlation']
-        fin['score'] = fin.apply(lambda x: x['adg_score'] * x['correlation'], axis=1)
+        index = f.index.values.squeeze().tolist()
+        corr = create_cosine_similarity(final_user).loc[user, index]
+        fin = pd.concat([f, corr], axis=1)
         fin.columns = ['adg_score', 'correlation']
         fin['score'] = fin.apply(lambda x: x['adg_score'] * x['correlation'], axis=1)
 
@@ -147,15 +145,48 @@ def User_item_score1(user):
         score.append(final_score)
 
     data = pd.DataFrame({'movieId': Movies_under_consideration, 'score': score})
-    top_two_recs = data.sort_values(by='score', ascending=False).head(2).merge(movies, how='inner',
+    top_5_recommendations = data.sort_values(by='score', ascending=False).head(5).merge(movies, how='inner',
                                                                                         on='movieId').title.values.tolist()
-    # list of top 2 recommendations movies
+    # list of top recpmmendations movies
 
-    return top_two_recs
+    return top_5_recommendations
 
+
+""" # list of movies in dataframe of 30
+    semi_list_of_movies = movies_in_neighborhood[movies_in_neighborhood.index == user].values
+    # create a list container
+    adj_list_of_movies = semi_list_of_movies.squeeze().tolist()
+    # list of movies to be used from pivot table of avg values
+    located_movies = final_movie.loc[:, item]
+
+    search = located_movies[located_movies.index.isin(adj_list_of_movies)]
+
+    # checks to see item is not null
+    checker = search[search.notnull()]
+
+    # update avg user information with UserId and the rating of user
+    avg_user = mean.loc[mean['userId'] == user, 'rating'].values[0]
+
+    # put info in a list container
+    index = checker.index.values.squeeze().tolist()
+
+    # find correlation
+    corr = similarity_with_movie.loc[user, index]
+
+    # create new dataframe with updated avg infromation
+    fin = pd.concat([checker, corr], axis=1)
+    fin.columns = ['adjusted_score', 'correlation']
+    fin['score'] = fin.apply(lambda x: x['adjusted_score'] * x['correlation'], axis=1)
+
+    # final score = given by avg_user rating rating + sum(score/correlation)
+    top = fin['score'].sum()
+    bottom = fin['correlation'].sum()
+    final_score = avg_user + (top / bottom)
+    return final_score"""
 
 # last row of dataframe = active user
 user = ratings.iloc[-1]['userId']
+
 
 def GUI_Output():
     list_ = []
