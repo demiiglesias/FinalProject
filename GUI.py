@@ -127,9 +127,9 @@ def content():
         user_input.place(x=365, y=60)
 
         def give_Rec():
-
             final_input = user_input.get()
             window2.destroy()
+
             last_window = Toplevel()
             last_window.geometry("700x500")
             last_window.title('Movies Recommended for you')

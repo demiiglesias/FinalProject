@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
 import warnings
+# import time
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from nltk.stem.snowball import SnowballStemmer
 from ast import literal_eval
 
 warnings.simplefilter('ignore')
+# start_time = time.time()
 
 # =================  Display Settings =================
 desired_width = 640
@@ -39,6 +41,8 @@ df = df.merge(keywords, on='id')
 
 # =================  Prep before possibly using get_smaller_df =================
 # Changing Genres
+# from: [{'id': 10749, 'name': 'Romance'}, {'id': 35, 'name': 'Comedy'}]
+# to: [Romance, Comedy]
 df['genres'] = df['genres'].fillna('[]').apply(literal_eval).apply(
     lambda x: [i['name'] for i in x] if isinstance(x, list) else [])
 
@@ -48,20 +52,24 @@ df['year'] = pd.to_datetime(df['release_date'], errors='coerce').apply(
 
 
 def get_smaller_df(x):
-    links_small = pd.read_csv('links_small.csv', usecols=['tmdbId'])
-    links_small = links_small[links_small['tmdbId'].notnull()]['tmdbId'].astype('int')
-    # Only rows having links_small's number under 'id' can remain. Dataframe goes from 46628 to 9219 rows
-    x = x[x['id'].isin(links_small)]
+    # links_small = pd.read_csv('links_small.csv', usecols=['tmdbId'])
+    # links_small = links_small[links_small['tmdbId'].notnull()]['tmdbId'].astype('int')
+    # # Only rows having links_small's number under 'id' can remain. Dataframe goes from 46628 to 9219 rows
+    # x = x[x['id'].isin(links_small)]
     x['popularity'] = x['popularity'].astype('float')
     x['runtime'] = x['runtime'].astype('float')
     # After the conditions below the dfframe goes from 9219 to 1298 rows
+    # find movie with lowest popularity out of all top 10 movie genres, lowest vote coutm, lowest avg
     filt = (x['popularity'] > 2) & (x['runtime'] > 60) & (x['vote_average'] >= 6) & (x['vote_count'] > 600)
+    
     x = x.loc[filt]
     return x
 
 
 # Uncomment the line below if you want a much smaller df: from 46628 to 1298 rows
 df = get_smaller_df(df).drop(columns=['runtime'])
+
+# print("(*df = df) Time elapsed: {:.2f}s".format(time.time() - start_time))
 
 # =================  More Set-up =================
 # Making sure the information in these col are Python literal structures (strings, numbers, tuples, lists, dicts, booleans, or None)
@@ -123,11 +131,13 @@ df['keywords'] = df['keywords'].apply(lambda x: [stemmer.stem(i) for i in x])
 df['keywords'] = df['keywords'].apply(lambda x: [str.lower(i.replace(" ", "")) for i in x])
 
 # Create the soup col which is comprised of the col keywords, cast, director, and genres (twice as much keywords and director)
+# df['soup'] = df['keywords'] + df['cast'] + df['director'] + df['genres'] + df['genres']
 df['soup'] = df['keywords'] + df['cast'] + df['director'] + df['genres'] + df['keywords']
 # Turn the list into a long string with ' ' in between each word
 df['soup'] = df['soup'].apply(lambda x: ' '.join(x))
 
 # ================= Bag of Words  =================
+# print("(pre bagOfWords) Time elapsed: {:.2f}s".format(time.time() - start_time))
 
 vectorizer = CountVectorizer(analyzer='word', ngram_range=(1, 2), min_df=0, stop_words='english')
 # fit the df: figures out what all the words in the corpus are, and
@@ -144,6 +154,9 @@ df = df.reset_index()
 indices = pd.Series(df.index, index=df['title'])
 
 
+# print("(post bagOfWords) Time elapsed: {:.2f}s".format(time.time() - start_time))
+
+
 # ================= WR and Recommender Functions  =================
 # Similar to IMDB's original weighted rating formula
 # v and R remain the same (v = # of votes of movie; R = ave rating of movie)
@@ -155,8 +168,11 @@ def weighted_rating(x, m, C):
 
 
 def recommender(movie_title):
+    print("recommender IS being called")
+    print(movie_title)
     # Provides the index for movie_title
     index = indices[movie_title]
+    print(index)
     # Makes a numbered/indexed list for the cosine similarities of that index
     cos_sim_list = list(enumerate(cos_sim[index]))
     # List is sorted so the most similar movie is on top (itself)
@@ -166,13 +182,13 @@ def recommender(movie_title):
     cos_sim_list = cos_sim_list[1:51]
     # Sheds the cosine similarity and keeps the indices
     movie_indices = [i[0] for i in cos_sim_list]
-
+    print("recommender reached movie_indices")
     # Making a list of movies with the previous indices and the col's listed below
     movies = df.iloc[movie_indices][['title', 'vote_count', 'vote_average', 'year']]
     # Only including vote counts and averages that aren't null
     vote_counts = movies[movies['vote_count'].notnull()]['vote_count'].astype('float')
     vote_averages = movies[movies['vote_average'].notnull()]['vote_average'].astype('float')
-
+    print("recommender reached vote_averages")
     # Finding the mean rating for all movies in this list
     C = vote_averages.mean()
     # Finding the minimum votes required to be recommended
@@ -189,4 +205,32 @@ def recommender(movie_title):
     final_list = final_list.sort_values('w_r', ascending=False)
     final_list = movies['title']
     final_list = final_list[0:10]
+    print(final_list)
     return final_list.to_string(index=False)
+
+# # =================  Printing/Testing  =================
+# print("========= recommender('Finding Nemo') =========")
+# print(recommender('Finding Nemo'))
+# print()
+# print("========= recommender('Inception') =========")
+# print(recommender('Inception'))
+# print()
+# print("========= recommender('The Dark Knight') =========")
+# print(recommender('The Dark Knight'))
+# print()
+# print("========= recommender('Mean Girls') =========")
+# print(recommender('Mean Girls'))
+# print()
+# print("========= recommender('Kill Bill: Vol. 1') =========")
+# print(recommender('Kill Bill: Vol. 1'))
+# print()
+# print("========= recommender('Interstellar') =========")
+# print(recommender('Interstellar'))
+# print()
+# print("========= recommender('(500) Days of Summer') =========")
+# print(recommender('(500) Days of Summer'))
+# print()
+# print("========= recommender('WALL·E') =========")
+# print(recommender('WALL·E'))
+# print()
+# print("(*Last) Time elapsed: {:.2f}s".format(time.time() - start_time))
