@@ -77,7 +77,7 @@ def rec(movie):
             # distances closer to 0 represent a more similar movie
             #print('{0}: {1}, with distance of {2}:'.format(i, movies.index[indices.flatten()[i]], distances.flatten()[i]))
 
-            # writes recommended movies to list
+            # writes recommended movies to list to get retreived by GUI
             additional_movies.append(title)
 
     df_final = pd.DataFrame(additional_movies)
