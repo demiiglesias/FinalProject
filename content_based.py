@@ -52,21 +52,16 @@ df['year'] = pd.to_datetime(df['release_date'], errors='coerce').apply(
 
 
 def get_smaller_df(x):
-    # links_small = pd.read_csv('links_small.csv', usecols=['tmdbId'])
-    # links_small = links_small[links_small['tmdbId'].notnull()]['tmdbId'].astype('int')
-    # # Only rows having links_small's number under 'id' can remain. Dataframe goes from 46628 to 9219 rows
-    # x = x[x['id'].isin(links_small)]
     x['popularity'] = x['popularity'].astype('float')
     x['runtime'] = x['runtime'].astype('float')
-    # After the conditions below the dfframe goes from 9219 to 1298 rows
     # find movie with lowest popularity out of all top 10 movie genres, lowest vote coutm, lowest avg
     filt = (x['popularity'] > 2) & (x['runtime'] > 60) & (x['vote_average'] >= 6) & (x['vote_count'] > 600)
-    
+
     x = x.loc[filt]
     return x
 
 
-# Uncomment the line below if you want a much smaller df: from 46628 to 1298 rows
+# Uncomment the line below if you want a much smaller df
 df = get_smaller_df(df).drop(columns=['runtime'])
 
 # print("(*df = df) Time elapsed: {:.2f}s".format(time.time() - start_time))
@@ -212,25 +207,5 @@ def recommender(movie_title):
 # print("========= recommender('Finding Nemo') =========")
 # print(recommender('Finding Nemo'))
 # print()
-# print("========= recommender('Inception') =========")
-# print(recommender('Inception'))
-# print()
-# print("========= recommender('The Dark Knight') =========")
-# print(recommender('The Dark Knight'))
-# print()
-# print("========= recommender('Mean Girls') =========")
-# print(recommender('Mean Girls'))
-# print()
-# print("========= recommender('Kill Bill: Vol. 1') =========")
-# print(recommender('Kill Bill: Vol. 1'))
-# print()
-# print("========= recommender('Interstellar') =========")
-# print(recommender('Interstellar'))
-# print()
-# print("========= recommender('(500) Days of Summer') =========")
-# print(recommender('(500) Days of Summer'))
-# print()
-# print("========= recommender('WALL·E') =========")
-# print(recommender('WALL·E'))
-# print()
+
 # print("(*Last) Time elapsed: {:.2f}s".format(time.time() - start_time))
